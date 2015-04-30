@@ -15,9 +15,8 @@ import eu.ha3.mc.haddon.Utility;
 
 /* x-placeholder-wtfplv2 */
 
-public abstract class HaddonUtilityImpl implements Utility
-{
-	final private static int WORLD_HEIGHT = 256;
+public abstract class HaddonUtilityImpl implements Utility {
+	private static final int WORLD_HEIGHT = 256;
 	
 	private Map<String, PrivateEntry> getters = new HashMap<String, PrivateEntry>();
 	private Map<String, PrivateEntry> setters = new HashMap<String, PrivateEntry>();
@@ -25,167 +24,104 @@ public abstract class HaddonUtilityImpl implements Utility
 	protected long ticksRan;
 	protected File modsFolder;
 	
-	public HaddonUtilityImpl()
-	{
-		// Initialize reflection (Call the static constructor)
+	/**
+	 * Initialise reflection (Call the static constructor)
+	 */
+	public HaddonUtilityImpl() {
 		HaddonUtilitySingleton.getInstance();
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void registerPrivateGetter(
-		String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName)
-	{
-		this.getters.put(
-			name, new HaddonPrivateEntry(name, classToPerformOn, zeroOffsets, lessToMoreImportantFieldName));
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void registerPrivateSetter(
-		String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName)
-	{
-		this.setters.put(
-			name, new HaddonPrivateEntry(name, classToPerformOn, zeroOffsets, lessToMoreImportantFieldName));
+	public void registerPrivateGetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName) {
+		getters.put(name, new HaddonPrivateEntry(name, classToPerformOn, zeroOffsets, lessToMoreImportantFieldName));
 	}
 	
 	@Override
-	public Object getPrivate(Object instance, String name) throws PrivateAccessException
-	{
-		return this.getters.get(name).get(instance);
+	public void registerPrivateSetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName) {
+		setters.put(name, new HaddonPrivateEntry(name, classToPerformOn, zeroOffsets, lessToMoreImportantFieldName));
 	}
 	
 	@Override
-	public void setPrivate(Object instance, String name, Object value) throws PrivateAccessException
-	{
-		this.setters.get(name).set(instance, value);
+	public Object getPrivate(Object instance, String name) throws PrivateAccessException {
+		return getters.get(name).get(instance);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets)
-		throws PrivateAccessException
-	{
+	public void setPrivate(Object instance, String name, Object value) throws PrivateAccessException {
+		setters.get(name).set(instance, value);
+	}
+	
+	@Override
+	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException {
 		return HaddonUtilitySingleton.getInstance().getPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsets);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue)
-		throws PrivateAccessException
-	{
+	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException {
 		HaddonUtilitySingleton.getInstance().setPrivateValue(
 			classToPerformOn, instanceToPerformOn, zeroOffsets, newValue);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getPrivateValueLiteral(
-		Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug)
-		throws PrivateAccessException
-	{
+	public Object getPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug) throws PrivateAccessException {
 		Object ret;
-		try
-		{
-			ret =
-				HaddonUtilitySingleton.getInstance().getPrivateValueViaName(
-					classToPerformOn, instanceToPerformOn, obfPriority);
-			
+		try {
+			ret = HaddonUtilitySingleton.getInstance().getPrivateValueViaName(classToPerformOn, instanceToPerformOn, obfPriority);
+		} catch (Exception e) {
+			ret = HaddonUtilitySingleton.getInstance().getPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsetsDebug); // This throws a PrivateAccessException
 		}
-		catch (Exception e)
-		{
-			ret =
-				HaddonUtilitySingleton.getInstance().getPrivateValue(
-					classToPerformOn, instanceToPerformOn, zeroOffsetsDebug); // This throws a PrivateAccessException
-			
-		}
-		
 		return ret;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void setPrivateValueLiteral(
-		Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue)
-		throws PrivateAccessException
-	{
-		try
-		{
-			HaddonUtilitySingleton.getInstance().setPrivateValueViaName(
-				classToPerformOn, instanceToPerformOn, obfPriority, newValue);
-			
-		}
-		catch (PrivateAccessException e)
-		{
-			HaddonUtilitySingleton.getInstance().setPrivateValue(
-				classToPerformOn, instanceToPerformOn, zeroOffsetsDebug, newValue); // This throws a PrivateAccessException
-			
+	public void setPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue) throws PrivateAccessException {
+		try {
+			HaddonUtilitySingleton.getInstance().setPrivateValueViaName(classToPerformOn, instanceToPerformOn, obfPriority, newValue);
+		} catch (PrivateAccessException e) {
+			HaddonUtilitySingleton.getInstance().setPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsetsDebug, newValue); // This throws a PrivateAccessException
 		}
 	}
 	
 	@Override
-	public int getWorldHeight()
-	{
+	public int getWorldHeight() {
 		return WORLD_HEIGHT;
-		
 	}
 	
 	@Override
-	public Object getCurrentScreen()
-	{
+	public Object getCurrentScreen() {
 		return Minecraft.getMinecraft().currentScreen;
-		
 	}
 	
 	@Override
-	@SuppressWarnings("rawtypes")
-	public boolean isCurrentScreen(final Class classtype)
-	{
+	public boolean isCurrentScreen(final Class classtype) {
 		Object current = getCurrentScreen();
-		
-		if (classtype == null)
-			return current == null;
-		
-		if (current == null)
-			return false;
-		
+		if (classtype == null) return current == null;
+		if (current == null) return false;
 		return classtype.isInstance(current);
-		
 	}
 	
 	@Override
-	public void closeCurrentScreen()
-	{
+	public void closeCurrentScreen() {
 		Minecraft.getMinecraft().displayGuiScreen(null);
-		
 	}
 	
 	@Override
-	public void printChat(Object... args)
-	{
-		if (Minecraft.getMinecraft().thePlayer == null)
-			return;
+	public void printChat(Object... args) {
+		if (Minecraft.getMinecraft().thePlayer == null) return;
 		
 		StringBuilder builder = new StringBuilder();
-		for (Object o : args)
-		{
+		for (Object o : args) {
 			builder.append(o);
 		}
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(builder.toString()));
 	}
 	
 	@Override
-	public boolean areKeysDown(int... args)
-	{
-		for (int arg : args)
-		{
-			if (!Keyboard.isKeyDown(arg))
-				return false;
-			
+	public boolean areKeysDown(int... args) {
+		for (int arg : args) {
+			if (!Keyboard.isKeyDown(arg)) return false;
 		}
-		
 		return true;
-		
 	}
 	
 	private ScaledResolution drawString_scaledRes = null;
@@ -194,70 +130,50 @@ public abstract class HaddonUtilityImpl implements Utility
 	private int drawString_textHeight;
 	
 	@Override
-	public void prepareDrawString()
-	{
+	public void prepareDrawString() {
 		Minecraft mc = Minecraft.getMinecraft();
-		
-		this.drawString_scaledRes = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		this.drawString_screenWidth = this.drawString_scaledRes.getScaledWidth();
-		this.drawString_screenHeight = this.drawString_scaledRes.getScaledHeight();
-		this.drawString_textHeight = mc.fontRendererObj.FONT_HEIGHT;
-		
+		drawString_scaledRes = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		drawString_screenWidth = drawString_scaledRes.getScaledWidth();
+		drawString_screenHeight = drawString_scaledRes.getScaledHeight();
+		drawString_textHeight = mc.fontRendererObj.FONT_HEIGHT;
 	}
 	
 	@Override
-	public void drawString(
-		String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca,
-		boolean hasShadow)
-	{
-		if (this.drawString_scaledRes == null)
-		{
-			prepareDrawString();
-		}
+	public void drawString(String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca, boolean hasShadow) {
+		if (drawString_scaledRes == null) prepareDrawString();
 		
 		Minecraft mc = Minecraft.getMinecraft();
 		
 		int xPos = (int) Math.floor(px * this.drawString_screenWidth) + offx;
 		int yPos = (int) Math.floor(py * this.drawString_screenHeight) + offy;
 		
-		if (alignment == '2' || alignment == '5' || alignment == '8')
-		{
+		if (alignment == '2' || alignment == '5' || alignment == '8') {
 			xPos = xPos - mc.fontRendererObj.getStringWidth(text) / 2;
-		}
-		else if (alignment == '3' || alignment == '6' || alignment == '9')
-		{
+		} else if (alignment == '3' || alignment == '6' || alignment == '9') {
 			xPos = xPos - mc.fontRendererObj.getStringWidth(text);
 		}
 		
-		if (alignment == '4' || alignment == '5' || alignment == '6')
-		{
+		if (alignment == '4' || alignment == '5' || alignment == '6') {
 			yPos = yPos - this.drawString_textHeight / 2;
-		}
-		else if (alignment == '1' || alignment == '2' || alignment == '3')
-		{
+		} else if (alignment == '1' || alignment == '2' || alignment == '3') {
 			yPos = yPos - this.drawString_textHeight;
 		}
 		
 		int color = ca << 24 | cr << 16 | cg << 8 | cb;
 		
-		if (hasShadow)
-		{
+		if (hasShadow) {
 			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, xPos, yPos, color);
-		}
-		else
-		{
+		} else {
 			Minecraft.getMinecraft().fontRendererObj.drawString(text, xPos, yPos, color);
 		}
 	}
 	
 	@Override
-	public File getModsFolder()
-	{
-		if (this.modsFolder != null)
-			return this.modsFolder;
-		
-		this.modsFolder = new File(Minecraft.getMinecraft().mcDataDir, "mods");
-		return this.modsFolder;
+	public File getModsFolder() {
+		if (modsFolder == null) {
+			modsFolder = new File(Minecraft.getMinecraft().mcDataDir, "mods");
+		}
+		return modsFolder;
 	}
 	
 }

@@ -42,8 +42,7 @@ public interface Utility
 	 * @param zeroOffsets
 	 * @param lessToMoreImportantFieldName
 	 */
-	public void registerPrivateSetter(
-		String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
+	public void registerPrivateSetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
 	
 	/**
 	 * Gets a registered Private field

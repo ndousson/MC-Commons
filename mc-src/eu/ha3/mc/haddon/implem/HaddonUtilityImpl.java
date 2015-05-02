@@ -6,7 +6,11 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.input.Keyboard;
 
@@ -109,11 +113,58 @@ public abstract class HaddonUtilityImpl implements Utility {
 	public void printChat(Object... args) {
 		if (Minecraft.getMinecraft().thePlayer == null) return;
 		
-		StringBuilder builder = new StringBuilder();
+		ChatComponentText message = new ChatComponentText("");
+		ChatStyle style = null;
 		for (Object o : args) {
-			builder.append(o);
+			if (o instanceof EnumChatFormatting) {
+				EnumChatFormatting code = (EnumChatFormatting)o;
+				if (style == null) {
+					style = new ChatStyle();
+				}
+				
+				switch (code) {
+					case OBFUSCATED:
+						style.setObfuscated(true);
+						break;
+					case BOLD:
+						style.setBold(true);
+						break;
+					case STRIKETHROUGH:
+						style.setStrikethrough(true);
+						break;
+					case UNDERLINE:
+						style.setUnderlined(true);
+						break;
+					case ITALIC:
+						style.setItalic(true);
+						break;
+					case RESET:
+						style = null;
+						break;
+					default:
+						style.setColor(code);
+				}
+			} else if (o instanceof ClickEvent) {
+				if (style == null) {
+					style = new ChatStyle();
+				}
+				style.setChatClickEvent((ClickEvent)o);
+			} else if (o instanceof HoverEvent) {
+				if (style == null) {
+					style = new ChatStyle();
+				}
+				style.setChatHoverEvent((HoverEvent)o);
+			} else {
+				ChatComponentText line = new ChatComponentText(o.toString());
+				if (style != null) {
+					line.setChatStyle(style);
+					style = null;
+				}
+				message.appendSibling(line);
+			}
 		}
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(builder.toString()));
+		
+		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(message);
 	}
 	
 	@Override

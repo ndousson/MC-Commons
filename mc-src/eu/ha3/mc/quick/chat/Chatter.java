@@ -1,5 +1,6 @@
 package eu.ha3.mc.quick.chat;
 
+import net.minecraft.util.EnumChatFormatting;
 import eu.ha3.mc.haddon.Haddon;
 
 /* x-placeholder */
@@ -17,12 +18,12 @@ public class Chatter
 	
 	public void printChat(Object... args)
 	{
-		printChat(new Object[] { ChatColorsSimple.COLOR_WHITE, this.prefix + ": " }, args);
+		printChat(new Object[] { EnumChatFormatting.WHITE, prefix + ": " }, args);
 	}
 	
 	public void printChatShort(Object... args)
 	{
-		printChat(new Object[] { ChatColorsSimple.COLOR_WHITE, "" }, args);
+		mod.getUtility().printChat(args);
 	}
 	
 	protected void printChat(final Object[] in, Object... args)
@@ -31,6 +32,6 @@ public class Chatter
 		System.arraycopy(in, 0, dest, 0, in.length);
 		System.arraycopy(args, 0, dest, in.length, args.length);
 		
-		this.mod.getUtility().printChat(dest);
+		mod.getUtility().printChat(dest);
 	}
 }

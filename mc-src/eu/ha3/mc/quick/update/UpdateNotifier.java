@@ -8,6 +8,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import net.minecraft.util.EnumChatFormatting;
+
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -18,7 +20,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import eu.ha3.mc.quick.chat.ChatColorsSimple;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.util.property.simple.ConfigProperty;
 
@@ -157,9 +158,9 @@ public class UpdateNotifier extends Thread
 					if (solvedMinecraftVersion.equals(""))
 					{
 						chatter.printChat(
-							ChatColorsSimple.COLOR_GOLD, "An update is available: ", ChatColorsSimple.COLOR_WHITE, "r"
-								+ solvedVersion, ChatColorsSimple.COLOR_GOLD, "  (You're ",
-							ChatColorsSimple.COLOR_WHITE, vc, ChatColorsSimple.COLOR_GOLD, " version"
+								EnumChatFormatting.GOLD, "An update is available: ", EnumChatFormatting.WHITE, "r"
+								+ solvedVersion, EnumChatFormatting.GOLD, "  (You're ",
+								EnumChatFormatting.WHITE, vc, EnumChatFormatting.GOLD, " version"
 								+ (vc > 1 ? "s" : "") + " late). ");
 						//chatter.printChat(
 						//	ChatColorsSimple.COLOR_GOLD, "A ", ChatColorsSimple.COLOR_WHITE, "r" + solvedVersion,
@@ -169,19 +170,19 @@ public class UpdateNotifier extends Thread
 					else if (solvedMinecraftVersion.equals(this.haddon.getIdentity().getHaddonMinecraftVersion()))
 					{
 						chatter.printChat(
-							ChatColorsSimple.COLOR_GOLD, "An update is available for your version of Minecraft: ",
-							ChatColorsSimple.COLOR_WHITE, "r" + solvedVersion, ChatColorsSimple.COLOR_GOLD,
-							"  (You're ", ChatColorsSimple.COLOR_WHITE, vc, ChatColorsSimple.COLOR_GOLD, " version"
+								EnumChatFormatting.GOLD, "An update is available for your version of Minecraft: ",
+								EnumChatFormatting.WHITE, "r" + solvedVersion, EnumChatFormatting.GOLD,
+							"  (You're ", EnumChatFormatting.WHITE, vc, EnumChatFormatting.GOLD, " version"
 								+ (vc > 1 ? "s" : "") + " late). ");
 					}
 					else
 					{
 						chatter.printChat(
-							ChatColorsSimple.COLOR_GOLD, "An update is available for ", ChatColorsSimple.COLOR_GOLD,
-							ChatColorsSimple.THEN_ITALIC + "another" + ChatColorsSimple.THEN_RESET,
-							ChatColorsSimple.COLOR_GOLD, " version of Minecraft: ", ChatColorsSimple.COLOR_WHITE, "r"
-								+ solvedVersion, " for " + solvedMinecraftVersion, ChatColorsSimple.COLOR_GOLD,
-							"  (You're ", ChatColorsSimple.COLOR_WHITE, vc, ChatColorsSimple.COLOR_GOLD, " version"
+								EnumChatFormatting.GOLD, "An update is available for ", EnumChatFormatting.GOLD,
+								EnumChatFormatting.ITALIC, "another",
+								EnumChatFormatting.GOLD, " version of Minecraft: ", EnumChatFormatting.WHITE, "r"
+								+ solvedVersion, " for " + solvedMinecraftVersion, EnumChatFormatting.GOLD,
+							"  (You're ", EnumChatFormatting.WHITE, vc, EnumChatFormatting.GOLD, " version"
 								+ (vc > 1 ? "s" : "") + " late). ");
 					}
 					chatter.printChatShort(/*ChatColorsSimple.COLOR_BRIGHTGREEN
@@ -191,14 +192,14 @@ public class UpdateNotifier extends Thread
 					if (this.displayRemaining > 0)
 					{
 						chatter.printChatShort(
-							ChatColorsSimple.COLOR_GRAY, "This message will display ", ChatColorsSimple.COLOR_WHITE,
-							this.displayRemaining, ChatColorsSimple.COLOR_GRAY, " more time"
+								EnumChatFormatting.GRAY, "This message will display ", EnumChatFormatting.WHITE,
+							this.displayRemaining, EnumChatFormatting.GRAY, " more time"
 								+ (this.displayRemaining > 1 ? "s" : "") + ".");
 					}
 					else
 					{
 						chatter.printChatShort(
-							ChatColorsSimple.COLOR_GRAY,
+								EnumChatFormatting.GRAY,
 							"You won't be notified anymore unless a newer version comes out.");
 					}
 					

@@ -12,5 +12,4 @@ public interface SupportsFrameEvents
 	 *            Intra-tick time, from 0f to 1f
 	 */
 	public void onFrame(float semi);
-	
 }

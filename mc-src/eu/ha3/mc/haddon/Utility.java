@@ -140,6 +140,13 @@ public interface Utility
 	 */
 	public File getModsFolder();
 	
+	/**
+	 * Returns the root Minecraft directory
+	 * 
+	 * @return Mc directory
+	 */
+	public File getMcFolder();
+	
 	public Object getCurrentScreen();
 	
 	public boolean isCurrentScreen(final Class classtype);

@@ -18,7 +18,7 @@ public class Chatter
 	
 	public void printChat(Object... args)
 	{
-		printChat(new Object[] { EnumChatFormatting.WHITE, prefix + ": " }, args);
+		printChat(new Object[] { EnumChatFormatting.WHITE, prefix }, args);
 	}
 	
 	public void printChatShort(Object... args)

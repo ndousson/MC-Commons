@@ -26,6 +26,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 	private Map<String, PrivateEntry> setters = new HashMap<String, PrivateEntry>();
 	
 	protected long ticksRan;
+	protected File mcFolder;
 	protected File modsFolder;
 	
 	/**
@@ -227,4 +228,11 @@ public abstract class HaddonUtilityImpl implements Utility {
 		return modsFolder;
 	}
 	
+	@Override
+	public File getMcFolder() {
+		if (mcFolder == null) {
+			mcFolder = Minecraft.getMinecraft().mcDataDir;
+		}
+		return mcFolder;
+	}
 }

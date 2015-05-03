@@ -10,5 +10,4 @@ public interface SupportsTickEvents
 	 * 
 	 */
 	public void onTick();
-	
 }

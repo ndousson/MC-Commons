@@ -75,28 +75,17 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster
 	}
 	
 	@Override
-	public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
-	{
-		if (!this.shouldTick)
-			return;
-		
-		if (!inGame)
-			return;
-		
-		if (this.enableTick && clock)
-		{
-			if (this.suTick)
-			{
-				((SupportsTickEvents) this.haddon).onTick();
+	public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock) {
+		if (!shouldTick || !inGame) return;
+		if (enableTick && clock) {
+			if (suTick) {
+				((SupportsTickEvents)haddon).onTick();
 			}
-			this.tickCounter++;
+			tickCounter++;
 		}
-		
-		if (this.enableFrame)
-		{
-			if (this.suFrame)
-			{
-				((SupportsFrameEvents) this.haddon).onFrame(partialTicks);
+		if (enableFrame) {
+			if (suFrame) {
+				((SupportsFrameEvents)haddon).onFrame(partialTicks);
 			}
 		}
 	}
@@ -117,5 +106,15 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster
 	public int getTicks()
 	{
 		return this.tickCounter;
+	}
+
+	@Override
+	public boolean getTickEnabled() {
+		return enableTick;
+	}
+
+	@Override
+	public boolean getFrameEnabled() {
+		return enableFrame;
 	}
 }

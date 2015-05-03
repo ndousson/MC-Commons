@@ -44,4 +44,6 @@ public interface Identity
 	 * @return
 	 */
 	public String getHaddonHumanVersion();
+	
+	public String getHaddonVersionPrefix();
 }

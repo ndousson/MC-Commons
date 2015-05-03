@@ -13,12 +13,19 @@ public class HaddonIdentity implements Identity
 	protected final String FOR;
 	protected final String ADDRESS;
 	
+	protected String PREFIX;
+	
 	public HaddonIdentity(String NAME, int VERSION, String FOR, String ADDRESS)
 	{
 		this.NAME = NAME;
 		this.VERSION = VERSION;
 		this.FOR = FOR;
 		this.ADDRESS = ADDRESS;
+	}
+	
+	public HaddonIdentity setPrefix(String prefix) {
+		PREFIX = prefix;
+		return this;
 	}
 	
 	@Override
@@ -48,6 +55,10 @@ public class HaddonIdentity implements Identity
 	@Override
 	public String getHaddonHumanVersion()
 	{
-		return "r" + getHaddonVersionNumber() + " for " + getHaddonMinecraftVersion();
+		return getHaddonVersionPrefix() + getHaddonVersionNumber() + " for " + getHaddonMinecraftVersion();
+	}
+	
+	public String getHaddonVersionPrefix() {
+		return PREFIX;
 	}
 }

@@ -8,16 +8,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import org.lwjgl.input.Keyboard;
 
 import eu.ha3.mc.haddon.PrivateAccessException;
 import eu.ha3.mc.haddon.Utility;
-
-/* x-placeholder-wtfplv2 */
 
 public abstract class HaddonUtilityImpl implements Utility {
 	private static final int WORLD_HEIGHT = 256;
@@ -155,6 +155,21 @@ public abstract class HaddonUtilityImpl implements Utility {
 					style = new ChatStyle();
 				}
 				style.setChatHoverEvent((HoverEvent)o);
+			} else if (o instanceof IChatComponent) {
+				if (o instanceof ChatComponentStyle) {
+					if (style != null) {
+						((ChatComponentStyle)o).setChatStyle(style);
+						style = null;
+					}
+				}
+				message.appendSibling((IChatComponent)o);
+			} else if (o instanceof ChatStyle) {
+				if (!((ChatStyle)o).isEmpty()) {
+					if (style != null) {
+						inheritFlat((ChatStyle)o, style);
+					}
+					style = ((ChatStyle)o);
+				}
 			} else {
 				ChatComponentText line = new ChatComponentText(o.toString());
 				if (style != null) {
@@ -167,6 +182,44 @@ public abstract class HaddonUtilityImpl implements Utility {
 		
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(message);
 	}
+	
+    /**
+     * Merges the given child ChatStyle into the given parent preserving hierarchical inheritance.
+     * 
+     * @param parent	The parent to inherit style information
+     * @param child		The child style who's properties will override those in the parent
+     */
+    private void inheritFlat(ChatStyle parent, ChatStyle child) {
+		if ((parent.getBold() != child.getBold()) && child.getBold()) {
+			parent.setBold(true);
+		}
+		if ((parent.getItalic() != child.getItalic()) && child.getItalic()) {
+			parent.setItalic(true);
+		}
+		if ((parent.getStrikethrough() != child.getStrikethrough()) && child.getStrikethrough()) {
+			parent.setStrikethrough(true);
+		}
+		if ((parent.getUnderlined() != child.getUnderlined()) && child.getUnderlined()) {
+			parent.setUnderlined(true);
+		}
+		if ((parent.getObfuscated() != child.getObfuscated()) && child.getObfuscated()) {
+			parent.setObfuscated(true);
+		}
+        
+        Object temp;
+        if ((temp = child.getColor()) != null) {
+        	parent.setColor((EnumChatFormatting)temp);
+        }
+        if ((temp = child.getChatClickEvent()) != null) {
+        	parent.setChatClickEvent((ClickEvent)temp);
+        }
+        if ((temp = child.getChatHoverEvent()) != null) {
+        	parent.setChatHoverEvent((HoverEvent)temp);
+        }
+        if ((temp = child.getInsertion()) != null) {
+        	parent.setInsertion((String)temp);
+        }
+    }
 	
 	@Override
 	public boolean areKeysDown(int... args) {

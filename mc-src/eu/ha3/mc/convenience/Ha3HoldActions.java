@@ -1,9 +1,6 @@
 package eu.ha3.mc.convenience;
 
-/* x-placeholder-wtfplv2 */
-
-public interface Ha3HoldActions
-{
+public interface Ha3HoldActions {
 	/**
 	 * Called when the key begins to be pressed.
 	 */

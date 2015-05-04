@@ -2,25 +2,19 @@ package eu.ha3.mc.haddon.implem;
 
 import eu.ha3.mc.haddon.Identity;
 
-/*
---filenotes-placeholder
-*/
-
-public class HaddonIdentity implements Identity
-{
+public class HaddonIdentity implements Identity {
 	protected final String NAME;
 	protected final int VERSION;
-	protected final String FOR;
+	protected final String MCVERSION;
 	protected final String ADDRESS;
 	
 	protected String PREFIX;
 	
-	public HaddonIdentity(String NAME, int VERSION, String FOR, String ADDRESS)
-	{
-		this.NAME = NAME;
-		this.VERSION = VERSION;
-		this.FOR = FOR;
-		this.ADDRESS = ADDRESS;
+	public HaddonIdentity(String name, int version, String mc, String address) {
+		NAME = name;
+		VERSION = version;
+		MCVERSION = mc;
+		ADDRESS = address;
 	}
 	
 	public HaddonIdentity setPrefix(String prefix) {
@@ -29,32 +23,27 @@ public class HaddonIdentity implements Identity
 	}
 	
 	@Override
-	public String getHaddonName()
-	{
-		return this.NAME;
+	public String getHaddonName() {
+		return NAME;
 	}
 	
 	@Override
-	public int getHaddonVersionNumber()
-	{
-		return this.VERSION;
+	public int getHaddonVersionNumber() {
+		return VERSION;
 	}
 	
 	@Override
-	public String getHaddonMinecraftVersion()
-	{
-		return this.FOR;
+	public String getHaddonMinecraftVersion() {
+		return MCVERSION;
 	}
 	
 	@Override
-	public String getHaddonAddress()
-	{
-		return this.ADDRESS;
+	public String getHaddonAddress() {
+		return ADDRESS;
 	}
 	
 	@Override
-	public String getHaddonHumanVersion()
-	{
+	public String getHaddonHumanVersion() {
 		return getHaddonVersionPrefix() + getHaddonVersionNumber() + " for " + getHaddonMinecraftVersion();
 	}
 	

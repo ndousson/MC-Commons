@@ -2,36 +2,29 @@ package eu.ha3.easy;
 
 import java.util.Locale;
 
-/* x-placeholder-wtfplv2 */
-
-public class TimeStatistic
-{
+public class TimeStatistic {
 	private final Locale locale;
 	
 	protected long startTime;
 	
-	public TimeStatistic(Locale locale)
-	{
+	public TimeStatistic(Locale locale) {
 		this.locale = locale;
-		this.startTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 	}
 	
-	public TimeStatistic()
-	{
+	public TimeStatistic() {
 		this(null);
 	}
 	
-	public long getMilliseconds()
-	{
-		return System.currentTimeMillis() - this.startTime;
+	public long getMilliseconds() {
+		return System.currentTimeMillis() - startTime;
 	}
 	
-	public String getSecondsAsString(int precision)
-	{
-		if (this.locale == null)
+	public String getSecondsAsString(int precision) {
+		if (locale == null) {
 			return String.format("%." + precision + "f", getMilliseconds() / 1000f);
-		
-		return String.format(this.locale, "%." + precision + "f", getMilliseconds() / 1000f);
+		}
+		return String.format(locale, "%." + precision + "f", getMilliseconds() / 1000f);
 	}
 	
 }

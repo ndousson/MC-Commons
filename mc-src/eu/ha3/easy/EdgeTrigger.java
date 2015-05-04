@@ -1,14 +1,11 @@
 package eu.ha3.easy;
 
-/* x-placeholder-wtfplv2 */
-
 /**
  * Simplistic edge triggered device.
  * 
  * @author Hurry
  */
-public class EdgeTrigger
-{
+public class EdgeTrigger {
 	private boolean currentState;
 	private EdgeModel triggerModel;
 	
@@ -17,10 +14,8 @@ public class EdgeTrigger
 	 * 
 	 * @param model
 	 */
-	public EdgeTrigger(EdgeModel model)
-	{
+	public EdgeTrigger(EdgeModel model) {
 		this(model, false);
-		
 	}
 	
 	/**
@@ -29,17 +24,13 @@ public class EdgeTrigger
 	 * @param model
 	 * @param initialState
 	 */
-	public EdgeTrigger(EdgeModel model, boolean initialState)
-	{
-		this.triggerModel = model;
-		this.currentState = initialState;
-		
+	public EdgeTrigger(EdgeModel model, boolean initialState) {
+		triggerModel = model;
+		currentState = initialState;
 	}
 	
-	public boolean getCurrentState()
-	{
-		return this.currentState;
-		
+	public boolean getCurrentState() {
+		return currentState;
 	}
 	
 	/**
@@ -48,26 +39,16 @@ public class EdgeTrigger
 	 * @param state
 	 * @return
 	 */
-	public boolean signalState(boolean state)
-	{
-		if (state != this.currentState)
-		{
-			this.currentState = state;
-			if (state)
-			{
-				this.triggerModel.onTrueEdge();
+	public boolean signalState(boolean state) {
+		if (state != currentState) {
+			currentState = state;
+			if (state) {
+				triggerModel.onTrueEdge();
+			} else {
+				triggerModel.onFalseEdge();
 			}
-			else
-			{
-				this.triggerModel.onFalseEdge();
-			}
-			
 			return true;
-			
 		}
-		
 		return false;
-		
 	}
-	
 }

@@ -5,113 +5,81 @@ import java.util.Map;
 
 import eu.ha3.util.property.contract.PropertyHolder;
 
-public class PropertyCell implements PropertyHolder
-{
+public class PropertyCell implements PropertyHolder {
 	private Map<String, String> properties;
 	
-	public PropertyCell()
-	{
-		this.properties = new HashMap<String, String>();
+	public PropertyCell() {
+		properties = new HashMap<String, String>();
 	}
 	
 	@Override
-	public String getString(String name)
-	{
-		if (!this.properties.containsKey(name))
-			throw new PropertyMissingException();
-		
-		return this.properties.get(name);
+	public String getString(String name) {
+		if (!properties.containsKey(name)) throw new PropertyMissingException();
+		return properties.get(name);
 	}
 	
 	@Override
-	public boolean getBoolean(String name)
-	{
-		if (!this.properties.containsKey(name))
-			throw new PropertyMissingException();
+	public boolean getBoolean(String name) {
+		if (!properties.containsKey(name)) throw new PropertyMissingException();
 		
-		try
-		{
+		try {
 			return Boolean.parseBoolean(this.properties.get(name));
-		}
-		catch (NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
 	
 	@Override
-	public int getInteger(String name)
-	{
-		if (!this.properties.containsKey(name))
-			throw new PropertyMissingException();
+	public int getInteger(String name) {
+		if (!properties.containsKey(name)) throw new PropertyMissingException();
 		
-		try
-		{
-			return Integer.parseInt(this.properties.get(name));
-		}
-		catch (NumberFormatException e)
-		{
+		try {
+			return Integer.parseInt(properties.get(name));
+		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
 	
 	@Override
-	public float getFloat(String name)
-	{
-		if (!this.properties.containsKey(name))
-			throw new PropertyMissingException();
+	public float getFloat(String name) {
+		if (!properties.containsKey(name)) throw new PropertyMissingException();
 		
-		try
-		{
-			return Float.parseFloat(this.properties.get(name));
-		}
-		catch (NumberFormatException e)
-		{
+		try {
+			return Float.parseFloat(properties.get(name));
+		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
 	
 	@Override
-	public long getLong(String name)
-	{
-		if (!this.properties.containsKey(name))
-			throw new PropertyMissingException();
+	public long getLong(String name) {
+		if (!properties.containsKey(name)) throw new PropertyMissingException();
 		
-		try
-		{
-			return Long.parseLong(this.properties.get(name));
-		}
-		catch (NumberFormatException e)
-		{
+		try {
+			return Long.parseLong(properties.get(name));
+		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
 	
 	@Override
-	public double getDouble(String name)
-	{
-		if (!this.properties.containsKey(name))
-			throw new PropertyMissingException();
+	public double getDouble(String name) {
+		if (!properties.containsKey(name)) throw new PropertyMissingException();
 		
-		try
-		{
-			return Double.parseDouble(this.properties.get(name));
-		}
-		catch (NumberFormatException e)
-		{
+		try {
+			return Double.parseDouble(properties.get(name));
+		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
 	
 	@Override
-	public void setProperty(String name, Object o)
-	{
-		this.properties.put(name, o.toString());
+	public void setProperty(String name, Object o) {
+		properties.put(name, o.toString());
 	}
 	
 	@Override
-	public Map<String, String> getAllProperties()
-	{
-		return this.properties;
+	public Map<String, String> getAllProperties() {
+		return properties;
 	}
 }

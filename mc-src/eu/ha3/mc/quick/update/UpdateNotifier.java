@@ -24,8 +24,6 @@ import com.google.gson.JsonParser;
 import eu.ha3.mc.quick.chat.Chatter;
 import eu.ha3.util.property.simple.ConfigProperty;
 
-/* x-placeholder-wtfplv2 */
-
 /**
  * The Update Notifier.
  * 

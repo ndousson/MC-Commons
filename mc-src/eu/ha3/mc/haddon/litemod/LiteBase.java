@@ -14,12 +14,7 @@ import eu.ha3.mc.haddon.implem.HaddonUtilityImpl;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 
-/*
---filenotes-placeholder
-*/
-
-public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster
-{
+public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster {
 	protected final Haddon haddon;
 	protected final boolean shouldTick;
 	protected final boolean suTick;
@@ -29,49 +24,42 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster
 	protected boolean enableTick;
 	protected boolean enableFrame;
 	
-	public LiteBase(Haddon haddon)
-	{
+	public LiteBase(Haddon haddon) {
 		this.haddon = haddon;
-		this.suTick = haddon instanceof SupportsTickEvents;
-		this.suFrame = haddon instanceof SupportsFrameEvents;
-		this.shouldTick = this.suTick || this.suFrame;
+		suTick = haddon instanceof SupportsTickEvents;
+		suFrame = haddon instanceof SupportsFrameEvents;
+		shouldTick = suTick || suFrame;
 		
-		this.haddon.setUtility(new HaddonUtilityImpl() {
+		haddon.setUtility(new HaddonUtilityImpl() {
 			@Override
-			public long getClientTick()
-			{
+			public long getClientTick() {
 				return getTicks();
 			}
 		});
-		this.haddon.setOperator(this);
+		haddon.setOperator(this);
 	}
 	
 	@Override
-	public String getName()
-	{
-		return this.haddon.getIdentity().getHaddonName();
+	public String getName() {
+		return haddon.getIdentity().getHaddonName();
 	}
 	
 	@Override
-	public String getVersion()
-	{
-		return this.haddon.getIdentity().getHaddonHumanVersion();
+	public String getVersion() {
+		return haddon.getIdentity().getHaddonHumanVersion();
 	}
 	
 	@Override
-	public void onInitCompleted(Minecraft minecraft, LiteLoader loader)
-	{
-		this.haddon.onLoad();
+	public void onInitCompleted(Minecraft minecraft, LiteLoader loader) {
+		haddon.onLoad();
 	}
 	
 	@Override
-	public void init(File configPath)
-	{
+	public void init(File configPath) {
 	}
 	
 	@Override
-	public void upgradeSettings(String version, File configPath, File oldConfigPath)
-	{
+	public void upgradeSettings(String version, File configPath, File oldConfigPath) {
 	}
 	
 	@Override
@@ -91,21 +79,18 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster
 	}
 	
 	@Override
-	public void setTickEnabled(boolean enabled)
-	{
-		this.enableTick = enabled;
+	public void setTickEnabled(boolean enabled) {
+		enableTick = enabled;
 	}
 	
 	@Override
-	public void setFrameEnabled(boolean enabled)
-	{
-		this.enableFrame = enabled;
+	public void setFrameEnabled(boolean enabled) {
+		enableFrame = enabled;
 	}
 	
 	@Override
-	public int getTicks()
-	{
-		return this.tickCounter;
+	public int getTicks() {
+		return tickCounter;
 	}
 
 	@Override

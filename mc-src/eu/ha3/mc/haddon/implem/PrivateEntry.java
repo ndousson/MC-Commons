@@ -2,15 +2,9 @@ package eu.ha3.mc.haddon.implem;
 
 import eu.ha3.mc.haddon.PrivateAccessException;
 
-/*
---filenotes-placeholder
-*/
-
-public interface PrivateEntry
-{
+public interface PrivateEntry {
 	public String getName();
 	
-	@SuppressWarnings("rawtypes")
 	public Class getTarget();
 	
 	public int getZero();

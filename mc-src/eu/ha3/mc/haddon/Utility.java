@@ -2,11 +2,7 @@ package eu.ha3.mc.haddon;
 
 import java.io.File;
 
-/* x-placeholder-wtfplv2 */
-
-@SuppressWarnings("rawtypes")
-public interface Utility
-{
+public interface Utility {
 	/**
 	 * Register a Private Access getter on a certain name, that operates on a
 	 * certain Class in a certain Object instance. The last two arguments are
@@ -23,8 +19,7 @@ public interface Utility
 	 * @param zeroOffsets
 	 * @param lessToMoreImportantFieldName
 	 */
-	public void registerPrivateGetter(
-		String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
+	public void registerPrivateGetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
 	
 	/**
 	 * Register a Private Access setter on a certain name, that operates on a
@@ -74,8 +69,7 @@ public interface Utility
 	 * @throws PrivateAccessException When the method fails
 	 */
 	@Deprecated
-	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets)
-		throws PrivateAccessException;
+	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException;
 	
 	/**
 	 * Forces a private value to be set, using the Zero Offset method.
@@ -87,8 +81,7 @@ public interface Utility
 	 * @throws PrivateAccessException When the method fails
 	 */
 	@Deprecated
-	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue)
-		throws PrivateAccessException;
+	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException;
 	
 	/**
 	 * Forces a private value to be read, first using the literal string of the
@@ -102,9 +95,7 @@ public interface Utility
 	 * @throws PrivateAccessException When the method fails twice
 	 */
 	@Deprecated
-	public Object getPrivateValueLiteral(
-		Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug)
-		throws PrivateAccessException;
+	public Object getPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug) throws PrivateAccessException;
 	
 	/**
 	 * Forces a private value to be set, first using the literal string of the
@@ -118,9 +109,7 @@ public interface Utility
 	 * @throws PrivateAccessException When the method fails twice
 	 */
 	@Deprecated
-	public void setPrivateValueLiteral(
-		Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue)
-		throws PrivateAccessException;
+	public void setPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue) throws PrivateAccessException;
 	
 	/**
 	 * Returns the world height.<br/>
@@ -183,8 +172,6 @@ public interface Utility
 	 * @param ca
 	 * @param hasShadow
 	 */
-	public void drawString(
-		String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca,
-		boolean hasShadow);
+	public void drawString(String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca, boolean hasShadow);
 	
 }

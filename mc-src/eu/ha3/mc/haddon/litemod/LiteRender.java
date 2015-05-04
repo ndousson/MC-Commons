@@ -10,45 +10,33 @@ import eu.ha3.mc.haddon.Haddon;
 import eu.ha3.mc.haddon.OperatorRenderer;
 import eu.ha3.mc.haddon.supporting.SupportsRenderEvents;
 
-/*
---filenotes-placeholder
-*/
-
-public class LiteRender extends LiteBase implements OperatorRenderer, RenderListener
-{
-	public LiteRender(Haddon haddon)
-	{
+public class LiteRender extends LiteBase implements OperatorRenderer, RenderListener {
+	public LiteRender(Haddon haddon) {
 		super(haddon);
 	}
 	
 	@Override
-	public void onRender()
-	{
-		((SupportsRenderEvents) this.haddon).onRender();
+	public void onRender() {
+		((SupportsRenderEvents) haddon).onRender();
 	}
 	
 	@Override
-	public void onRenderGui(GuiScreen currentScreen)
-	{
-		((SupportsRenderEvents) this.haddon).onRenderGui(currentScreen);
+	public void onRenderGui(GuiScreen currentScreen) {
+		((SupportsRenderEvents) haddon).onRenderGui(currentScreen);
 	}
 	
 	@Override
-	public void onRenderWorld()
-	{
-		((SupportsRenderEvents) this.haddon).onRenderWorld();
+	public void onRenderWorld() {
+		((SupportsRenderEvents) haddon).onRenderWorld();
 	}
 	
 	@Override
-	public void onSetupCameraTransform()
-	{
-		((SupportsRenderEvents) this.haddon).onSetupCameraTransform();
+	public void onSetupCameraTransform() {
+		((SupportsRenderEvents) haddon).onSetupCameraTransform();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addRenderable(@SuppressWarnings("rawtypes") Class renderClass, Object renderable)
-	{
+	public void addRenderable(Class renderClass, Object renderable) {
 		ModUtilities.addRenderer(renderClass, (Render) renderable);
 	}
 	

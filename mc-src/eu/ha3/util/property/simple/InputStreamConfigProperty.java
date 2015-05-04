@@ -12,106 +12,81 @@ import eu.ha3.util.property.contract.ConfigInputStream;
 import eu.ha3.util.property.contract.PropertyHolder;
 import eu.ha3.util.property.contract.Versionnable;
 
-/*
---filenotes-placeholder
-*/
-
-public class InputStreamConfigProperty implements PropertyHolder, Versionnable, ConfigInputStream
-{
+public class InputStreamConfigProperty implements PropertyHolder, Versionnable, ConfigInputStream {
 	private VersionnableProperty mixed;
 	
-	public InputStreamConfigProperty()
-	{
-		this.mixed = new VersionnableProperty();
+	public InputStreamConfigProperty() {
+		mixed = new VersionnableProperty();
 	}
 	
 	@Override
-	public boolean loadStream(InputStream stream)
-	{
-		try
-		{
+	public boolean loadStream(InputStream stream) {
+		try {
 			Reader reader = new InputStreamReader(stream);
 			
 			Properties props = new Properties();
 			props.load(reader);
 			
-			for (Entry<Object, Object> entry : props.entrySet())
-			{
-				this.mixed.setProperty(entry.getKey().toString(), entry.getValue().toString());
-				
+			for (Entry<Object, Object> entry : props.entrySet()) {
+				mixed.setProperty(entry.getKey().toString(), entry.getValue().toString());
 			}
-			this.mixed.commit();
-			
-		}
-		catch (IOException e)
-		{
+			mixed.commit();
+			return true;
+		} catch (IOException e) {
 			e.printStackTrace();
-			this.mixed.revert();
-			return false;
+			mixed.revert();
 		}
-		
-		return true;
-		
+		return false;
 	}
 	
 	@Override
-	public boolean commit()
-	{
-		return this.mixed.commit();
+	public boolean commit() {
+		return mixed.commit();
 	}
 	
 	@Override
-	public void revert()
-	{
-		this.mixed.revert();
+	public void revert() {
+		mixed.revert();
 	}
 	
 	@Override
-	public String getString(String name)
-	{
-		return this.mixed.getString(name);
+	public String getString(String name) {
+		return mixed.getString(name);
 	}
 	
 	@Override
-	public boolean getBoolean(String name)
-	{
-		return this.mixed.getBoolean(name);
+	public boolean getBoolean(String name) {
+		return mixed.getBoolean(name);
 	}
 	
 	@Override
-	public int getInteger(String name)
-	{
-		return this.mixed.getInteger(name);
+	public int getInteger(String name) {
+		return mixed.getInteger(name);
 	}
 	
 	@Override
-	public float getFloat(String name)
-	{
-		return this.mixed.getFloat(name);
+	public float getFloat(String name) {
+		return mixed.getFloat(name);
 	}
 	
 	@Override
-	public long getLong(String name)
-	{
-		return this.mixed.getLong(name);
+	public long getLong(String name) {
+		return mixed.getLong(name);
 	}
 	
 	@Override
-	public double getDouble(String name)
-	{
-		return this.mixed.getDouble(name);
+	public double getDouble(String name) {
+		return mixed.getDouble(name);
 	}
 	
 	@Override
-	public void setProperty(String name, Object o)
-	{
-		this.mixed.setProperty(name, o);
+	public void setProperty(String name, Object o) {
+		mixed.setProperty(name, o);
 	}
 	
 	@Override
-	public Map<String, String> getAllProperties()
-	{
-		return this.mixed.getAllProperties();
+	public Map<String, String> getAllProperties() {
+		return mixed.getAllProperties();
 	}
 	
 }

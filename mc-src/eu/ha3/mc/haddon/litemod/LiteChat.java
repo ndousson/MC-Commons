@@ -8,34 +8,25 @@ import eu.ha3.mc.haddon.Haddon;
 import eu.ha3.mc.haddon.OperatorChatWatcher;
 import eu.ha3.mc.haddon.supporting.SupportsChatEvents;
 
-/*
---filenotes-placeholder
-*/
-
-public class LiteChat extends LiteBase implements OperatorChatWatcher, ChatListener
-{
+public class LiteChat extends LiteBase implements OperatorChatWatcher, ChatListener {
 	protected final boolean suChat;
 	
 	protected boolean enableChat;
 	
-	public LiteChat(Haddon haddon)
-	{
+	public LiteChat(Haddon haddon) {
 		super(haddon);
-		this.suChat = haddon instanceof SupportsChatEvents;
+		suChat = haddon instanceof SupportsChatEvents;
 	}
 	
 	@Override
-	public void setChatEnabled(boolean enabled)
-	{
-		this.enableChat = enabled;
+	public void setChatEnabled(boolean enabled) {
+		enableChat = enabled;
 	}
 	
 	@Override
-	public void onChat(IChatComponent chat, String message)
-	{
-		if (this.suChat && this.enableChat)
-		{
-			((SupportsChatEvents) this.haddon).onChat(chat, message);
+	public void onChat(IChatComponent chat, String message) {
+		if (suChat && enableChat) {
+			((SupportsChatEvents) haddon).onChat(chat, message);
 		}
 	}
 }

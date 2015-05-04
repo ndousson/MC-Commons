@@ -2,16 +2,9 @@ package eu.ha3.mc.haddon.supporting;
 
 import net.minecraft.client.gui.GuiScreen;
 
-/* x-placeholder-wtfplv2 */
-
-public interface SupportsGuiTickEvents
-{
+public interface SupportsGuiTickEvents {
 	/**
-	 * Triggered on each tick outside of a game while the gui tick events are
-	 * hooked onto the manager.
-	 * 
-	 * @param gui
+	 * Triggered on each tick outside of a game while the gui tick events are hooked onto the manager.
 	 */
 	public void onGuiTick(GuiScreen gui);
-	
 }

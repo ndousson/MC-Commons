@@ -2,10 +2,7 @@ package eu.ha3.mc.convenience;
 
 import net.minecraft.client.Minecraft;
 
-/* x-placeholder-wtfplv2 */
-
-public abstract class Ha3Scroller
-{
+public abstract class Ha3Scroller {
 	private Minecraft minecraft;
 	
 	private boolean isRunning;
@@ -23,82 +20,54 @@ public abstract class Ha3Scroller
 	
 	protected abstract void doStop();
 	
-	public Ha3Scroller(Minecraft managerIn)
-	{
-		this.minecraft = managerIn;
-		this.pitchBase = 0;
-		this.pitchGlobal = 0;
-		
+	public Ha3Scroller(Minecraft manager) {
+		minecraft = manager;
+		pitchBase = 0;
+		pitchGlobal = 0;
 	}
 	
-	protected Minecraft getMinecraft()
-	{
-		return this.minecraft;
-		
+	protected Minecraft getMinecraft() {
+		return minecraft;
 	}
 	
-	public float getInitialPitch()
-	{
-		return this.pitchBase;
-		
+	public float getInitialPitch() {
+		return pitchBase;
 	}
 	
-	public float getPitch()
-	{
-		return this.pitchGlobal;
-		
+	public float getPitch() {
+		return pitchGlobal;
 	}
 	
-	public void draw(float fspan)
-	{
-		if (!this.isRunning)
-			return;
-		
-		doDraw(fspan);
-		
+	public void draw(float fspan) {
+		if (isRunning) {
+			doDraw(fspan);
+		}
 	}
 	
-	public void routine()
-	{
-		if (!this.isRunning)
-			return;
-		
-		doRoutineBefore();
-		
-		this.pitchGlobal = this.minecraft.thePlayer.rotationPitch;
-		
-		doRoutineAfter();
-		
+	public void routine() {
+		if (isRunning) {
+			doRoutineBefore();
+			pitchGlobal = minecraft.thePlayer.rotationPitch;
+			doRoutineAfter();
+		}
 	}
 	
-	public void start()
-	{
-		if (this.isRunning)
-			return;
-		
-		this.isRunning = true;
-		
-		this.pitchBase = this.minecraft.thePlayer.rotationPitch;
-		
-		doStart();
-		
+	public void start() {
+		if (isRunning) {
+			isRunning = true;
+			pitchBase = minecraft.thePlayer.rotationPitch;
+			doStart();
+		}
 	}
 	
-	public void stop()
-	{
-		if (!this.isRunning)
-			return;
-		
-		this.isRunning = false;
-		
-		doStop();
-		
+	public void stop() {
+		if (!isRunning) {
+			isRunning = false;
+			doStop();
+		}
 	}
 	
-	public boolean isRunning()
-	{
-		return this.isRunning;
-		
+	public boolean isRunning() {
+		return isRunning;
 	}
-	
 }

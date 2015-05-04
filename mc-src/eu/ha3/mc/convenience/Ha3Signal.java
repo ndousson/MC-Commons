@@ -1,10 +1,7 @@
 package eu.ha3.mc.convenience;
 
-/* x-placeholder-wtfplv2 */
-
-public interface Ha3Signal
-{
-	// XXX Blatent design pattern
+public interface Ha3Signal {
+	// XXX Blatant design pattern
 	void signal();
 	
 }

@@ -12,7 +12,7 @@ public class Ha3KeyManager {
 	}
 	
 	public void addKeyBinding(KeyBinding mckeybinding, Ha3KeyActions keyactions) {
-		keys.put(mckeybinding/*.keyCode*/, new Ha3KeyBinding(mckeybinding, keyactions));
+		keys.put(mckeybinding, new Ha3KeyBinding(mckeybinding, keyactions));
 	}
 	
 	public void handleKeyDown(KeyBinding event) {

@@ -16,12 +16,12 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	
 	@Override
 	public boolean commit() {
-		if (soft.getAllProperties().size() == 0) return false;
-		
-		hard.getAllProperties().putAll(this.soft.getAllProperties());
-		soft.getAllProperties().clear();
-		
-		return true;
+		if (soft.getAllProperties().size() > 0) {
+			hard.getAllProperties().putAll(this.soft.getAllProperties());
+			soft.getAllProperties().clear();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	public String getString(String name) {
 		try {
 			return soft.getString(name);
-		} catch (PropertyMissingException e) {
+		} catch (PropertyException e) {
 			return hard.getString(name);
 		}
 	}
@@ -42,9 +42,7 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	public boolean getBoolean(String name) {
 		try {
 			return soft.getBoolean(name);
-		} catch (PropertyMissingException e) {
-			return hard.getBoolean(name);
-		} catch (PropertyTypeException e) {
+		} catch (PropertyException e) {
 			return hard.getBoolean(name);
 		}
 	}
@@ -53,9 +51,7 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	public int getInteger(String name) {
 		try {
 			return soft.getInteger(name);
-		} catch (PropertyMissingException e) {
-			return this.hard.getInteger(name);
-		} catch (PropertyTypeException e) {
+		} catch (PropertyException e) {
 			return hard.getInteger(name);
 		}
 	}
@@ -64,9 +60,7 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	public float getFloat(String name) {
 		try {
 			return soft.getFloat(name);
-		} catch (PropertyMissingException e) {
-			return hard.getFloat(name);
-		} catch (PropertyTypeException e) {
+		} catch (PropertyException e) {
 			return hard.getFloat(name);
 		}
 	}
@@ -75,9 +69,7 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	public long getLong(String name) {
 		try {
 			return soft.getLong(name);
-		} catch (PropertyMissingException e) {
-			return hard.getLong(name);
-		} catch (PropertyTypeException e) {
+		} catch (PropertyException e) {
 			return hard.getLong(name);
 		}
 	}
@@ -86,9 +78,7 @@ public class VersionnableProperty implements PropertyHolder, Versionnable {
 	public double getDouble(String name) {
 		try {
 			return soft.getDouble(name);
-		} catch (PropertyMissingException e) {
-			return hard.getDouble(name);
-		} catch (PropertyTypeException e) {
+		} catch (PropertyException e) {
 			return hard.getDouble(name);
 		}
 	}

@@ -1,5 +1,6 @@
 package eu.ha3.mc.haddon.implem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ public class HaddonPrivateEntry implements PrivateEntry {
 		this.target = target;
 		this.zero = zero;
 		fieldNames = lessToMoreImportantFieldName.clone();
-		fieldNamesMoreToLess_depleting = Arrays.asList(fieldNames);
+		fieldNamesMoreToLess_depleting = new ArrayList(Arrays.asList(fieldNames));
 		Collections.reverse(fieldNamesMoreToLess_depleting);
 	}
 	

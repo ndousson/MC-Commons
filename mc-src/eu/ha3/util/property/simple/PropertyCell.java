@@ -14,16 +14,16 @@ public class PropertyCell implements PropertyHolder {
 	
 	@Override
 	public String getString(String name) {
-		if (!properties.containsKey(name)) throw new PropertyMissingException();
-		return properties.get(name);
+		if (properties.containsKey(name)) {
+			return properties.get(name);
+		}
+		throw new PropertyMissingException();
 	}
 	
 	@Override
 	public boolean getBoolean(String name) {
-		if (!properties.containsKey(name)) throw new PropertyMissingException();
-		
 		try {
-			return Boolean.parseBoolean(this.properties.get(name));
+			return Boolean.parseBoolean(getString(name));
 		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
@@ -31,10 +31,8 @@ public class PropertyCell implements PropertyHolder {
 	
 	@Override
 	public int getInteger(String name) {
-		if (!properties.containsKey(name)) throw new PropertyMissingException();
-		
 		try {
-			return Integer.parseInt(properties.get(name));
+			return Integer.parseInt(getString(name));
 		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
@@ -42,10 +40,8 @@ public class PropertyCell implements PropertyHolder {
 	
 	@Override
 	public float getFloat(String name) {
-		if (!properties.containsKey(name)) throw new PropertyMissingException();
-		
 		try {
-			return Float.parseFloat(properties.get(name));
+			return Float.parseFloat(getString(name));
 		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
@@ -53,10 +49,8 @@ public class PropertyCell implements PropertyHolder {
 	
 	@Override
 	public long getLong(String name) {
-		if (!properties.containsKey(name)) throw new PropertyMissingException();
-		
 		try {
-			return Long.parseLong(properties.get(name));
+			return Long.parseLong(getString(name));
 		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
@@ -64,10 +58,8 @@ public class PropertyCell implements PropertyHolder {
 	
 	@Override
 	public double getDouble(String name) {
-		if (!properties.containsKey(name)) throw new PropertyMissingException();
-		
 		try {
-			return Double.parseDouble(properties.get(name));
+			return Double.parseDouble(getString(name));
 		} catch (NumberFormatException e) {
 			throw new PropertyTypeException();
 		}

@@ -36,7 +36,7 @@ class Ha3KeyBinding {
 	}
 	
 	void handle() {
-		if (!pending) {
+		if (pending) {
 			diffKey++; // This gets incremented, and reset if button is pressed (HandleBefore)
 			if (diffKey > tolerence) { // tolerence because don't know which will get executed first (keypress or think)
 				keyactions.doAfter(time);

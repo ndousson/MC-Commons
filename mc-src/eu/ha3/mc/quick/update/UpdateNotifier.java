@@ -3,18 +3,10 @@ package eu.ha3.mc.quick.update;
 import java.io.InputStream;
 import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
-
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.EnumChatFormatting;
 
 import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -30,11 +22,10 @@ import eu.ha3.util.property.simple.ConfigProperty;
  * @author Hurry
  * 
  */
-public class UpdateNotifier extends Thread {
-	private final boolean USE_JSON = true;
+public class UpdateNotifier extends Thread implements Updater {
 	
 	private final NotifiableHaddon haddon;
-	private final String queryLocation;
+	private final String[] queryLocations;
 	
 	private int lastFound;
 	
@@ -42,9 +33,9 @@ public class UpdateNotifier extends Thread {
 	private int displayRemaining = 0;
 	private boolean enabled = true;
 	
-	public UpdateNotifier(NotifiableHaddon mod, String query) {
+	public UpdateNotifier(NotifiableHaddon mod, String... queries) {
 		haddon = mod;
-		queryLocation = query;
+		queryLocations = queries;
 		lastFound = mod.getIdentity().getHaddonVersionNumber();
 	}
 	
@@ -54,73 +45,49 @@ public class UpdateNotifier extends Thread {
 	
 	@Override
 	public void run() {
-		try {
-			checkUpdates();
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (String i : queryLocations) {
+			try {
+				if (checkUpdates(i)) return;
+			} catch (Exception e) {
+				log("Exception whilst checking update location: " + i);
+				e.printStackTrace();
+			}
 		}
 	}
 	
-	private void checkUpdates() throws Exception {
+	private boolean checkUpdates(String queryLoc) throws Exception {
 		final int currentVersionNumber = haddon.getIdentity().getHaddonVersionNumber();
 		final String currentVersionType = haddon.getIdentity().getHaddonVersionPrefix();
 		
-		URL url = new URL(String.format(queryLocation, currentVersionNumber));
-		
+		URL url = new URL(String.format(queryLoc, currentVersionNumber, currentVersionType));
 		InputStream contents = url.openStream();
 		
 		int solvedVersion = 0;
 		String solvedVersionType = "r";
 		String solvedMinecraftVersion = "";
-		if (USE_JSON) {
-			String jasonString = IOUtils.toString(contents, "UTF-8");
-			
-			JsonObject jason = new JsonParser().parse(jasonString).getAsJsonObject();
-			JsonArray versions = jason.get("versions").getAsJsonArray();
-			for (JsonElement element : versions.getAsJsonArray()) {
-				JsonObject o = element.getAsJsonObject();
-				int vn = o.get("number").getAsInt();
-				if (vn > solvedVersion) {
-					solvedVersion = vn;
-					if (o.has("for")) {
-						solvedMinecraftVersion = o.get("for").getAsString();
-					}
+		String jasonString = IOUtils.toString(contents, "UTF-8");
+		
+		JsonObject jason = new JsonParser().parse(jasonString).getAsJsonObject();
+		JsonArray versions = jason.get("versions").getAsJsonArray();
+		for (JsonElement element : versions.getAsJsonArray()) {
+			JsonObject o = element.getAsJsonObject();
+			int vn = o.get("number").getAsInt();
+			if (vn > solvedVersion) {
+				solvedVersion = vn;
+				if (o.has("for")) {
+					solvedMinecraftVersion = o.get("for").getAsString();
 				}
 				if (o.has("type")) {
 					solvedVersionType = o.get("type").getAsString();
 				}
 			}
-		} else {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(contents);
-			
-			XPathFactory xpf = XPathFactory.newInstance();
-			XPath xp = xpf.newXPath();
-			
-			NodeList nl = doc.getElementsByTagName("release");
-			
-			for (int i = 0; i < nl.getLength(); i++) {
-				Node release = nl.item(i);
-				String versionnumber = xp.evaluate("./version", release);
-				if (versionnumber != null) {
-					int vn = Integer.parseInt(versionnumber);
-					if (vn > solvedVersion) solvedVersion = vn;
-				}
-				String versiontype = xp.evaluate("./type", release);
-				if (versiontype != null) {
-					solvedVersionType = versiontype;
-				}
-			}
 		}
 		
-		System.out.println("(UN: " + haddon.getIdentity().getHaddonName() + ") Update version found: " + solvedVersion + " (running " + currentVersionNumber + ")");
-		
+		log("Update version found: " + solvedVersion + " (running " + currentVersionNumber + ")");
 		Thread.sleep(10000);
 		
 		if (solvedVersion > currentVersionNumber || (solvedVersion >= currentVersionNumber && !solvedVersionType.contentEquals(currentVersionType))) {
 			ConfigProperty config = haddon.getConfig();
-			Chatter chatter = haddon.getChatter();
 			
 			boolean needsSave = false;
 			if (solvedVersion != lastFound) {
@@ -128,57 +95,69 @@ public class UpdateNotifier extends Thread {
 				displayRemaining = displayCount;
 				
 				needsSave = true;
-				config.setProperty("update_found.version", lastFound);
-				config.setProperty("update_found.display.remaining.value", displayRemaining);
+				config.setProperty("update.version", lastFound);
+				config.setProperty("update.display.remaining", displayRemaining);
 			}
 			
 			if (displayRemaining > 0) {
-				config.setProperty("update_found.display.remaining.value", displayRemaining--);
-				
+				config.setProperty("update.display.remaining", displayRemaining--);
 				int vc = solvedVersion - currentVersionNumber;
-				if (vc == 0) vc++;
-				
-				if (solvedMinecraftVersion.equals("")) {
-					chatter.printChat(EnumChatFormatting.GOLD, "An update is available: ", solvedVersionType + solvedVersion);
-				} else if (solvedMinecraftVersion.equals(haddon.getIdentity().getHaddonMinecraftVersion())) {
-					chatter.printChat(EnumChatFormatting.GOLD, "An update is available for your version of Minecraft: ", solvedVersionType + solvedVersion);
-				} else {
-					chatter.printChat(
-							EnumChatFormatting.GOLD, "An update is available for ",
-							EnumChatFormatting.GOLD, EnumChatFormatting.ITALIC, "another",
-							EnumChatFormatting.GOLD, " version of Minecraft: ",
-							solvedVersionType + solvedVersion + " for " + solvedMinecraftVersion);
-				}
-				chatter.printChatShort(EnumChatFormatting.GOLD, "You're ", EnumChatFormatting.WHITE, vc, EnumChatFormatting.GOLD, " version" + (vc > 1 ? "s" : "") + " late.");
-				chatter.printChatShort(EnumChatFormatting.UNDERLINE, new ClickEvent(ClickEvent.Action.OPEN_URL, haddon.getIdentity().getHaddonAddress()), haddon.getIdentity().getHaddonAddress());
-				
-				if (displayRemaining > 0) {
-					chatter.printChatShort(
-							EnumChatFormatting.GRAY, "This message will display ",
-							EnumChatFormatting.WHITE, displayRemaining,
-							EnumChatFormatting.GRAY, " more time" + (displayRemaining > 1 ? "s" : "") + ".");
-				} else {
-					chatter.printChatShort(EnumChatFormatting.GRAY, "You won't be notified anymore unless a newer version comes out.");
-				}
+				reportUpdate(solvedMinecraftVersion, solvedVersionType, solvedVersion, vc == 0 ? 1 : vc);
 				needsSave = true;
 			}
 			
-			if (needsSave) haddon.saveConfig();
+			if (needsSave) {
+				haddon.saveConfig();
+			}
+			
+			return needsSave;
+		}
+		
+		return false;
+	}
+	
+	private void reportUpdate(String solvedMC, String solvedType, int solved, int count) {
+		Chatter chatter = haddon.getChatter();
+		if (solvedMC.equals("")) {
+			chatter.printChat(EnumChatFormatting.GOLD, "An update is available: ", solvedType + solved);
+		} else if (solvedMC.equals(haddon.getIdentity().getHaddonMinecraftVersion())) {
+			chatter.printChat(EnumChatFormatting.GOLD, "An update is available for your version of Minecraft: ", solvedType + solved);
+		} else {
+			chatter.printChat(
+					EnumChatFormatting.GOLD, "An update is available for ",
+					EnumChatFormatting.GOLD, EnumChatFormatting.ITALIC, "another",
+					EnumChatFormatting.GOLD, " version of Minecraft: ", solvedType + solved + " for " + solvedMC);
+		}
+		chatter.printChatShort(
+				EnumChatFormatting.GOLD, "You're ", EnumChatFormatting.WHITE, count, EnumChatFormatting.GOLD, " version" + (count > 1 ? "s" : "") + " late.");
+		chatter.printChatShort(EnumChatFormatting.UNDERLINE, new ClickEvent(ClickEvent.Action.OPEN_URL, haddon.getIdentity().getHaddonAddress()), haddon.getIdentity().getHaddonAddress());
+		
+		if (displayRemaining > 0) {
+			chatter.printChatShort(
+					EnumChatFormatting.GRAY, "This message will display ",
+					EnumChatFormatting.WHITE, displayRemaining,
+					EnumChatFormatting.GRAY, " more time" + (displayRemaining > 1 ? "s" : "") + ".");
+		} else {
+			chatter.printChatShort(EnumChatFormatting.GRAY, "You won't be notified anymore unless a newer version comes out.");
 		}
 	}
 	
+	private void log(String mess) {
+		System.out.println("(UN: " + haddon.getIdentity().getHaddonName() + ") " + mess);
+	}
+	
 	public void fillDefaults(ConfigProperty configuration) {
-		configuration.setProperty("update_found.enabled", true);
-		configuration.setProperty("update_found.version", haddon.getIdentity().getHaddonVersionNumber());
-		configuration.setProperty("update_found.display.remaining.value", 0);
-		configuration.setProperty("update_found.display.count.value", 3);
+		configuration.setProperty("update.enabled", true);
+		configuration.setProperty("update.version", haddon.getIdentity().getHaddonVersionNumber());
+		configuration.setProperty("update.display.remaining", 0);
+		configuration.setProperty("update.display.count", 3);
 	}
 	
 	public void loadConfig(ConfigProperty configuration) {
-		enabled = configuration.getBoolean("update_found.enabled");
-		lastFound = configuration.getInteger("update_found.version");
-		displayRemaining = configuration.getInteger("update_found.display.remaining.value");
-		displayCount = configuration.getInteger("update_found.display.count.value");
+		enabled = configuration.getBoolean("update.enabled");
+		lastFound = configuration.getInteger("update.version");
+		displayRemaining = configuration.getInteger("update.display.remaining");
+		displayCount = configuration.getInteger("update.display.count");
 	}
 	
 }

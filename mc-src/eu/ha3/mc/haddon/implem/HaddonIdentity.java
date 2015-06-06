@@ -4,6 +4,7 @@ import eu.ha3.mc.haddon.Identity;
 
 public class HaddonIdentity implements Identity {
 	protected final String NAME;
+	
 	protected final int VERSION;
 	protected final String MCVERSION;
 	protected final String ADDRESS;
@@ -15,6 +16,7 @@ public class HaddonIdentity implements Identity {
 		VERSION = version;
 		MCVERSION = mc;
 		ADDRESS = address;
+		PREFIX = "r";
 	}
 	
 	public HaddonIdentity setPrefix(String prefix) {

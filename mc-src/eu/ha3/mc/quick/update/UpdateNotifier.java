@@ -100,7 +100,7 @@ public class UpdateNotifier extends Thread implements Updater {
 			}
 			
 			if (displayRemaining > 0) {
-				config.setProperty("update.display.remaining", displayRemaining--);
+				config.setProperty("update.display.remaining", --displayRemaining);
 				int vc = solvedVersion - currentVersionNumber;
 				reportUpdate(solvedMinecraftVersion, solvedVersionType, solvedVersion, vc == 0 ? 1 : vc);
 				needsSave = true;

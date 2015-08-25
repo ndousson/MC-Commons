@@ -56,17 +56,20 @@ public abstract class HaddonUtilityImpl implements Utility {
 		setters.get(name).set(instance, value);
 	}
 	
+	@Deprecated
 	@Override
 	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException {
 		return HaddonUtilitySingleton.getInstance().getPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsets);
 	}
 	
+	@Deprecated
 	@Override
 	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException {
 		HaddonUtilitySingleton.getInstance().setPrivateValue(
 			classToPerformOn, instanceToPerformOn, zeroOffsets, newValue);
 	}
 	
+	@Deprecated
 	@Override
 	public Object getPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug) throws PrivateAccessException {
 		Object ret;
@@ -78,6 +81,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 		return ret;
 	}
 	
+	@Deprecated
 	@Override
 	public void setPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue) throws PrivateAccessException {
 		try {

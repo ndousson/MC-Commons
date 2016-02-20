@@ -5,6 +5,11 @@ import java.util.Map.Entry;
 import eu.ha3.util.property.contract.PropertyHolder;
 import eu.ha3.util.property.simple.ConfigProperty;
 
+/**
+ * Test runner.
+ * <p>
+ * Purpose unknown.
+ */
 public class Test implements Runnable {
 	public static void main(String[] args) {
 		new Test().run();

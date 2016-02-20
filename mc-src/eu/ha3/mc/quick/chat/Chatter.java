@@ -3,6 +3,9 @@ package eu.ha3.mc.quick.chat;
 import net.minecraft.util.EnumChatFormatting;
 import eu.ha3.mc.haddon.Haddon;
 
+/**
+ * Chat printer for sending formatted chat messages on behalf of the assigned mod.
+ */
 public class Chatter {
 	private final Haddon mod;
 	private final String prefix;

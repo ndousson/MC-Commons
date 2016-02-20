@@ -25,6 +25,7 @@ public class LiteRender extends LiteBase implements OperatorRenderer, RenderList
 		((SupportsRenderEvents) haddon).onRenderGui(currentScreen);
 	}
 	
+	@Deprecated
 	@Override
 	public void onRenderWorld() {
 		((SupportsRenderEvents) haddon).onRenderWorld();

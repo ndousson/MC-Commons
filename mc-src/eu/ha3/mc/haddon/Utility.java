@@ -2,6 +2,9 @@ package eu.ha3.mc.haddon;
 
 import java.io.File;
 
+/**
+ * Basic utility interface for communicating with the game.
+ */
 public interface Utility {
 	/**
 	 * Register a Private Access getter on a certain name, that operates on a
@@ -136,16 +139,36 @@ public interface Utility {
 	 */
 	public File getMcFolder();
 	
+	/**
+	 * Gets the current GuiScreen.
+	 * <p>
+	 * No type information provided.
+	 */
 	public Object getCurrentScreen();
 	
+	/**
+	 * Checks if the current gui screen matches the given type.
+	 */
 	public boolean isCurrentScreen(final Class classtype);
 	
+	/**
+	 * Closes the current gui screen if there is one
+	 */
 	public void closeCurrentScreen();
 	
+	/**
+	 * Gets the total ticks that have passed on the client.
+	 */
 	public long getClientTick();
 	
+	/**
+	 * Prints a chat message.
+	 */
 	public void printChat(Object... args);
 	
+	/**
+	 * Checks if all of the given keys are pressed.
+	 */
 	public boolean areKeysDown(int... args);
 	
 	/**

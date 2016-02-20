@@ -7,6 +7,9 @@ import net.minecraft.client.settings.KeyBinding;
 import eu.ha3.mc.haddon.supporting.SupportsKeyEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 
+/**
+ * Watches for key changes and notifies the given mod
+ */
 public class KeyWatcher implements SupportsTickEvents {
 	private final SupportsKeyEvents watcher;
 	private final List<KeyBinding> keys;

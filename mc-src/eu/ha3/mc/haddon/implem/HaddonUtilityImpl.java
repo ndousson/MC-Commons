@@ -56,12 +56,18 @@ public abstract class HaddonUtilityImpl implements Utility {
 		setters.get(name).set(instance, value);
 	}
 	
+	/**
+	 * Warning: This may be removed in a later update.
+	 */
 	@Deprecated
 	@Override
 	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException {
 		return HaddonUtilitySingleton.getInstance().getPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsets);
 	}
 	
+	/**
+	 * Warning: This may be removed in a later update.
+	 */
 	@Deprecated
 	@Override
 	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException {
@@ -69,6 +75,9 @@ public abstract class HaddonUtilityImpl implements Utility {
 			classToPerformOn, instanceToPerformOn, zeroOffsets, newValue);
 	}
 	
+	/**
+	 * Warning: This may be removed in a later update.
+	 */
 	@Deprecated
 	@Override
 	public Object getPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug) throws PrivateAccessException {
@@ -81,6 +90,9 @@ public abstract class HaddonUtilityImpl implements Utility {
 		return ret;
 	}
 	
+	/**
+	 * Warning: This may be removed in a later update.
+	 */
 	@Deprecated
 	@Override
 	public void setPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue) throws PrivateAccessException {
@@ -108,7 +120,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 		if (current == null) return false;
 		return classtype.isInstance(current);
 	}
-	
+		
 	@Override
 	public void closeCurrentScreen() {
 		Minecraft.getMinecraft().displayGuiScreen(null);

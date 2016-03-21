@@ -253,7 +253,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 	@Override
 	public void prepareDrawString() {
 		Minecraft mc = Minecraft.getMinecraft();
-		drawString_scaledRes = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		drawString_scaledRes = new ScaledResolution(mc);
 		drawString_screenWidth = drawString_scaledRes.getScaledWidth();
 		drawString_screenHeight = drawString_scaledRes.getScaledHeight();
 		drawString_textHeight = mc.fontRendererObj.FONT_HEIGHT;

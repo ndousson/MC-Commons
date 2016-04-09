@@ -3,6 +3,7 @@ package eu.ha3.mc.haddon.litemod;
 import java.io.File;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 import com.mumfrey.liteloader.InitCompleteListener;
 import com.mumfrey.liteloader.LiteMod;
@@ -12,6 +13,7 @@ import eu.ha3.mc.haddon.Haddon;
 import eu.ha3.mc.haddon.OperatorCaster;
 import eu.ha3.mc.haddon.implem.HaddonUtilityImpl;
 import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
+import eu.ha3.mc.haddon.supporting.SupportsPlayerFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 
 public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster {
@@ -19,6 +21,7 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster {
 	protected final boolean shouldTick;
 	protected final boolean suTick;
 	protected final boolean suFrame;
+	protected final boolean suFrameP;
 	
 	protected int tickCounter;
 	protected boolean enableTick;
@@ -28,6 +31,8 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster {
 		this.haddon = haddon;
 		suTick = haddon instanceof SupportsTickEvents;
 		suFrame = haddon instanceof SupportsFrameEvents;
+		suFrameP = haddon instanceof SupportsPlayerFrameEvents;
+		
 		shouldTick = suTick || suFrame;
 		
 		haddon.setUtility(new HaddonUtilityImpl() {
@@ -74,6 +79,11 @@ public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster {
 		if (enableFrame) {
 			if (suFrame) {
 				((SupportsFrameEvents)haddon).onFrame(partialTicks);
+			}
+			if (suFrameP) {
+				for (EntityPlayer ply : haddon.getUtility().getClient().getAllPlayers()) {
+					if (ply != null) ((SupportsPlayerFrameEvents)haddon).onFrame(ply, partialTicks);
+				}
 			}
 		}
 	}

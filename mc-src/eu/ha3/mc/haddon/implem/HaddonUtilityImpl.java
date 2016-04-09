@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -16,11 +17,14 @@ import net.minecraft.util.IChatComponent;
 
 import org.lwjgl.input.Keyboard;
 
+import eu.ha3.mc.haddon.Client;
 import eu.ha3.mc.haddon.PrivateAccessException;
 import eu.ha3.mc.haddon.Utility;
 
 public abstract class HaddonUtilityImpl implements Utility {
 	private static final int WORLD_HEIGHT = 256;
+	
+	private static final HaddonClientImpl client = new HaddonClientImpl();
 	
 	private Map<String, PrivateEntry> getters = new HashMap<String, PrivateEntry>();
 	private Map<String, PrivateEntry> setters = new HashMap<String, PrivateEntry>();
@@ -37,12 +41,12 @@ public abstract class HaddonUtilityImpl implements Utility {
 	}
 	
 	@Override
-	public void registerPrivateGetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName) {
+	public void registerPrivateGetter(String name, Class<?> classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName) {
 		getters.put(name, new HaddonPrivateEntry(name, classToPerformOn, zeroOffsets, lessToMoreImportantFieldName));
 	}
 	
 	@Override
-	public void registerPrivateSetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName) {
+	public void registerPrivateSetter(String name, Class<?> classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName) {
 		setters.put(name, new HaddonPrivateEntry(name, classToPerformOn, zeroOffsets, lessToMoreImportantFieldName));
 	}
 	
@@ -56,53 +60,6 @@ public abstract class HaddonUtilityImpl implements Utility {
 		setters.get(name).set(instance, value);
 	}
 	
-	/**
-	 * Warning: This may be removed in a later update.
-	 */
-	@Deprecated
-	@Override
-	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException {
-		return HaddonUtilitySingleton.getInstance().getPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsets);
-	}
-	
-	/**
-	 * Warning: This may be removed in a later update.
-	 */
-	@Deprecated
-	@Override
-	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException {
-		HaddonUtilitySingleton.getInstance().setPrivateValue(
-			classToPerformOn, instanceToPerformOn, zeroOffsets, newValue);
-	}
-	
-	/**
-	 * Warning: This may be removed in a later update.
-	 */
-	@Deprecated
-	@Override
-	public Object getPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug) throws PrivateAccessException {
-		Object ret;
-		try {
-			ret = HaddonUtilitySingleton.getInstance().getPrivateValueViaName(classToPerformOn, instanceToPerformOn, obfPriority);
-		} catch (Exception e) {
-			ret = HaddonUtilitySingleton.getInstance().getPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsetsDebug); // This throws a PrivateAccessException
-		}
-		return ret;
-	}
-	
-	/**
-	 * Warning: This may be removed in a later update.
-	 */
-	@Deprecated
-	@Override
-	public void setPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue) throws PrivateAccessException {
-		try {
-			HaddonUtilitySingleton.getInstance().setPrivateValueViaName(classToPerformOn, instanceToPerformOn, obfPriority, newValue);
-		} catch (PrivateAccessException e) {
-			HaddonUtilitySingleton.getInstance().setPrivateValue(classToPerformOn, instanceToPerformOn, zeroOffsetsDebug, newValue); // This throws a PrivateAccessException
-		}
-	}
-	
 	@Override
 	public int getWorldHeight() {
 		return WORLD_HEIGHT;
@@ -110,25 +67,55 @@ public abstract class HaddonUtilityImpl implements Utility {
 	
 	@Override
 	public Object getCurrentScreen() {
-		return Minecraft.getMinecraft().currentScreen;
+		return client.unsafe().currentScreen;
 	}
 	
 	@Override
-	public boolean isCurrentScreen(final Class classtype) {
+	public boolean isCurrentScreen(final Class<?> classtype) {
 		Object current = getCurrentScreen();
 		if (classtype == null) return current == null;
 		if (current == null) return false;
 		return classtype.isInstance(current);
 	}
-		
+	
+	@Override
+	public void displayScreen(Object screen) {
+		client.unsafe().displayGuiScreen((GuiScreen)screen);
+	}
+	
 	@Override
 	public void closeCurrentScreen() {
-		Minecraft.getMinecraft().displayGuiScreen(null);
+		displayScreen(null);
+	}
+	
+	@Override
+	public Client getClient() {
+		return client;
+	}
+	
+	@Override
+	public void pauseSounds(boolean pause) {
+		if (pause) {
+			client.unsafe().getSoundHandler().pauseSounds();
+		} else {
+			client.unsafe().getSoundHandler().resumeSounds();
+		}
+	}
+	
+	@Override
+	public boolean isGamePaused() {
+		Object current = getCurrentScreen();
+		return current != null && (((GuiScreen)current).doesGuiPauseGame() && isSingleplayer());
+	}
+
+	@Override
+	public boolean isSingleplayer() {
+		return client.unsafe().isSingleplayer() && !client.unsafe().getIntegratedServer().getPublic();
 	}
 	
 	@Override
 	public void printChat(Object... args) {
-		if (Minecraft.getMinecraft().thePlayer == null) return;
+		if (client.unsafe().thePlayer == null) return;
 		
 		ChatComponentText message = new ChatComponentText("");
 		ChatStyle style = null;
@@ -196,7 +183,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 			}
 		}
 		
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(message);
+		client.unsafe().thePlayer.addChatComponentMessage(message);
 	}
 	
     /**
@@ -252,47 +239,46 @@ public abstract class HaddonUtilityImpl implements Utility {
 	
 	@Override
 	public void prepareDrawString() {
-		Minecraft mc = Minecraft.getMinecraft();
-		drawString_scaledRes = new ScaledResolution(mc);
+		drawString_scaledRes = new ScaledResolution(client.unsafe());
 		drawString_screenWidth = drawString_scaledRes.getScaledWidth();
 		drawString_screenHeight = drawString_scaledRes.getScaledHeight();
-		drawString_textHeight = mc.fontRendererObj.FONT_HEIGHT;
+		drawString_textHeight = client.unsafe().fontRendererObj.FONT_HEIGHT;
 	}
 	
 	@Override
 	public void drawString(String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca, boolean hasShadow) {
 		if (drawString_scaledRes == null) prepareDrawString();
 		
-		Minecraft mc = Minecraft.getMinecraft();
+		FontRenderer font = client.unsafe().fontRendererObj;
 		
-		int xPos = (int) Math.floor(px * this.drawString_screenWidth) + offx;
-		int yPos = (int) Math.floor(py * this.drawString_screenHeight) + offy;
+		int xPos = (int) Math.floor(px * drawString_screenWidth) + offx;
+		int yPos = (int) Math.floor(py * drawString_screenHeight) + offy;
 		
 		if (alignment == '2' || alignment == '5' || alignment == '8') {
-			xPos = xPos - mc.fontRendererObj.getStringWidth(text) / 2;
+			xPos = xPos - font.getStringWidth(text) / 2;
 		} else if (alignment == '3' || alignment == '6' || alignment == '9') {
-			xPos = xPos - mc.fontRendererObj.getStringWidth(text);
+			xPos = xPos - font.getStringWidth(text);
 		}
 		
 		if (alignment == '4' || alignment == '5' || alignment == '6') {
-			yPos = yPos - this.drawString_textHeight / 2;
+			yPos = yPos - drawString_textHeight / 2;
 		} else if (alignment == '1' || alignment == '2' || alignment == '3') {
-			yPos = yPos - this.drawString_textHeight;
+			yPos = yPos - drawString_textHeight;
 		}
 		
 		int color = ca << 24 | cr << 16 | cg << 8 | cb;
 		
 		if (hasShadow) {
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, xPos, yPos, color);
+			font.drawStringWithShadow(text, xPos, yPos, color);
 		} else {
-			Minecraft.getMinecraft().fontRendererObj.drawString(text, xPos, yPos, color);
+			font.drawString(text, xPos, yPos, color);
 		}
 	}
 	
 	@Override
 	public File getModsFolder() {
 		if (modsFolder == null) {
-			modsFolder = new File(Minecraft.getMinecraft().mcDataDir, "mods");
+			modsFolder = new File(getMcFolder(), "mods");
 		}
 		return modsFolder;
 	}
@@ -300,7 +286,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 	@Override
 	public File getMcFolder() {
 		if (mcFolder == null) {
-			mcFolder = Minecraft.getMinecraft().mcDataDir;
+			mcFolder = client.unsafe().mcDataDir;
 		}
 		return mcFolder;
 	}

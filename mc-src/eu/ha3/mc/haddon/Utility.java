@@ -22,7 +22,7 @@ public interface Utility {
 	 * @param zeroOffsets
 	 * @param lessToMoreImportantFieldName
 	 */
-	public void registerPrivateGetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
+	public void registerPrivateGetter(String name, Class<?> classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
 	
 	/**
 	 * Register a Private Access setter on a certain name, that operates on a
@@ -40,7 +40,7 @@ public interface Utility {
 	 * @param zeroOffsets
 	 * @param lessToMoreImportantFieldName
 	 */
-	public void registerPrivateSetter(String name, Class classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
+	public void registerPrivateSetter(String name, Class<?> classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
 	
 	/**
 	 * Gets a registered Private field
@@ -61,58 +61,6 @@ public interface Utility {
 	 * @throws PrivateAccessException
 	 */
 	public void setPrivate(Object instance, String name, Object value) throws PrivateAccessException;
-	
-	/**
-	 * Forces a private value to be read, using the Zero Offset method.
-	 * 
-	 * @param classToPerformOn Class of the object being manipulated
-	 * @param instanceToPerformOn Object being manipulated
-	 * @param zeroOffsets Offsets from zero
-	 * @return Object to be read
-	 * @throws PrivateAccessException When the method fails
-	 */
-	@Deprecated
-	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException;
-	
-	/**
-	 * Forces a private value to be set, using the Zero Offset method.
-	 * 
-	 * @param classToPerformOn Class of the object being manipulated
-	 * @param instanceToPerformOn Object being manipulated
-	 * @param zeroOffsets Offsets from zero
-	 * @param newValue New value to override
-	 * @throws PrivateAccessException When the method fails
-	 */
-	@Deprecated
-	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException;
-	
-	/**
-	 * Forces a private value to be read, first using the literal string of the
-	 * field, and if it fails, the Zero Offset method.
-	 * 
-	 * @param classToPerformOn Class of the object being manipulated
-	 * @param instanceToPerformOn Object being manipulated
-	 * @param obfPriority Literal string of the field, when obfuscated
-	 * @param zeroOffsetsDebug Offsets from zero as a fallback
-	 * @return Object to be read.
-	 * @throws PrivateAccessException When the method fails twice
-	 */
-	@Deprecated
-	public Object getPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug) throws PrivateAccessException;
-	
-	/**
-	 * Forces a private value to be set, first using the literal string of the
-	 * field, and if it fails, the Zero Offset method.
-	 * 
-	 * @param classToPerformOn Class of the object being manipulated
-	 * @param instanceToPerformOn Object being manipulated
-	 * @param obfPriority Literal string of the field, when obfuscated
-	 * @param zeroOffsetsDebug Offsets from zero as a fallback
-	 * @param newValue New value to override
-	 * @throws PrivateAccessException When the method fails twice
-	 */
-	@Deprecated
-	public void setPrivateValueLiteral(Class classToPerformOn, Object instanceToPerformOn, String obfPriority, int zeroOffsetsDebug, Object newValue) throws PrivateAccessException;
 	
 	/**
 	 * Returns the world height.<br/>
@@ -149,17 +97,32 @@ public interface Utility {
 	/**
 	 * Checks if the current gui screen matches the given type.
 	 */
-	public boolean isCurrentScreen(final Class classtype);
+	public boolean isCurrentScreen(final Class<?> classtype);
+	
+	public void displayScreen(Object screen);
 	
 	/**
 	 * Closes the current gui screen if there is one
 	 */
 	public void closeCurrentScreen();
 	
+	public Client getClient();
+	
 	/**
 	 * Gets the total ticks that have passed on the client.
 	 */
 	public long getClientTick();
+	
+	public void pauseSounds(boolean pause);
+	
+	/**
+	 * Checks if the game is paused.
+	 * <p>
+	 * i.e There are no guis currently open that pause the game, we are not on a lan server, nor on a dedicated server. 
+	 */
+	public boolean isGamePaused();
+	
+	public boolean isSingleplayer();
 	
 	/**
 	 * Prints a chat message.
@@ -182,18 +145,18 @@ public interface Utility {
 	 * of a classic layout keyboard numpad. For instance, 7 means "top left",
 	 * because the key "7" is at the top left.
 	 * 
-	 * @param text
-	 * @param px
-	 * @param py
-	 * @param offx
-	 * @param offy
+	 * @param text	Text to print.
+	 * @param px	X position
+	 * @param py	Y position
+	 * @param offx	Horizontal offset
+	 * @param offy	Vertical offset
 	 * @param alignment Number from 1 to 9 corresponding to numpad position on a
 	 *            keyboard (not a phone).
 	 * @param cr Red color 0-255
-	 * @param cg
-	 * @param cb
-	 * @param ca
-	 * @param hasShadow
+	 * @param cg Green color 0-255
+	 * @param cb Blue color 0-255
+	 * @param ca Alpha channel 0-255
+	 * @param hasShadow	True to paint a shadow
 	 */
 	public void drawString(String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca, boolean hasShadow);
 	

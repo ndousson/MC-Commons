@@ -1,5 +1,8 @@
 package eu.ha3.easy;
 
+/**
+ * Edge trigger listener.
+ */
 public interface EdgeModel {
 	/**
 	 * Triggered when the key goes down.

@@ -5,6 +5,9 @@ import java.util.Map;
 import eu.ha3.util.property.contract.PropertyHolder;
 import eu.ha3.util.property.contract.Versionnable;
 
+/**
+ * Versionable properties file.
+ */
 public class VersionnableProperty implements PropertyHolder, Versionnable {
 	private PropertyHolder soft;
 	private PropertyHolder hard;

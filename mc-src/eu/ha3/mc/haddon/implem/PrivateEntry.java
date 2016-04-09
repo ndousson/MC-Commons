@@ -5,7 +5,7 @@ import eu.ha3.mc.haddon.PrivateAccessException;
 public interface PrivateEntry {
 	public String getName();
 	
-	public Class getTarget();
+	public Class<?> getTarget();
 	
 	public int getZero();
 	

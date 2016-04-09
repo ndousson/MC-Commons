@@ -9,17 +9,17 @@ import eu.ha3.mc.haddon.PrivateAccessException;
 
 public class HaddonPrivateEntry implements PrivateEntry {
 	private final String name;
-	private final Class target;
+	private final Class<?> target;
 	private final int zero;
 	private final String[] fieldNames;
 	private final List<String> fieldNamesMoreToLess_depleting;
 	
-	public HaddonPrivateEntry(String name, Class target, int zero, String... lessToMoreImportantFieldName) {
+	public HaddonPrivateEntry(String name, Class<?> target, int zero, String... lessToMoreImportantFieldName) {
 		this.name = name;
 		this.target = target;
 		this.zero = zero;
 		fieldNames = lessToMoreImportantFieldName.clone();
-		fieldNamesMoreToLess_depleting = new ArrayList(Arrays.asList(fieldNames));
+		fieldNamesMoreToLess_depleting = new ArrayList<String>(Arrays.asList(fieldNames));
 		Collections.reverse(fieldNamesMoreToLess_depleting);
 	}
 	
@@ -29,7 +29,7 @@ public class HaddonPrivateEntry implements PrivateEntry {
 	}
 	
 	@Override
-	public Class getTarget() {
+	public Class<?> getTarget() {
 		return target;
 	}
 	

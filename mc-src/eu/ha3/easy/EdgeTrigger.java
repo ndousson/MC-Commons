@@ -8,6 +8,7 @@ package eu.ha3.easy;
 public class EdgeTrigger {
 	private boolean currentState;
 	private EdgeModel triggerModel;
+	private long time;
 	
 	/**
 	 * Creates an edge trigger with an initial state of false.
@@ -36,8 +37,8 @@ public class EdgeTrigger {
 	/**
 	 * Tell the edge trigger to evaluate with a new current state.
 	 * 
-	 * @param state
-	 * @return
+	 * @param state	The new state
+	 * @return	True if this trigger's state changed.
 	 */
 	public boolean signalState(boolean state) {
 		if (state != currentState) {
@@ -50,5 +51,20 @@ public class EdgeTrigger {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Attempts to toggle the state of this EdgeTrigger.
+	 * 
+	 * @return True if the state changed.
+	 */
+	public boolean toggleState()	{
+		long newtime = System.currentTimeMillis();
+		if (newtime - time < 1000) {
+			time = newtime;
+			return false;
+		}
+		time = newtime;
+		return signalState(!currentState);
 	}
 }

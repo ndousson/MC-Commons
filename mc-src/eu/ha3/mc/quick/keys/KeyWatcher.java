@@ -19,6 +19,9 @@ public class KeyWatcher implements SupportsTickEvents {
 		keys = new ArrayList<KeyBinding>();
 	}
 	
+	/**
+	 * Adds a new keybinding to watch for changes.
+	 */
 	public void add(KeyBinding key) {
 		keys.add(key);
 	}

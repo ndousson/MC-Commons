@@ -15,10 +15,8 @@ public class HaddonUtilitySingleton {
 		try {
 			fieldMod = java.lang.reflect.Field.class.getDeclaredField("modifiers");
 			fieldMod.setAccessible(true);
-		} catch (SecurityException e) {
-			throw new RuntimeException("haddonUtility critical failure: Security");
-		} catch (NoSuchFieldException e) {
-			throw new RuntimeException("haddonUtility critical failure: NoSuchField");
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("haddonUtility critical failure", e);
 		}
 	}
 	
@@ -30,80 +28,55 @@ public class HaddonUtilitySingleton {
 		return fieldMod;
 	}
 	
-	public Object getPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException {
+	public Object getPrivateValue(Class<?> classToPerformOn, Object instanceToPerformOn, int zeroOffsets) throws PrivateAccessException {
 		try {
 			Field field = classToPerformOn.getDeclaredFields()[zeroOffsets];
 			field.setAccessible(true);
 			return field.get(instanceToPerformOn);
-		} catch (IllegalAccessException illegalaccessexception) {
-			throw new PrivateAccessException("getPrivateValue has failed: IllegalAccess");
-			
-		} catch (IllegalArgumentException e) {
-			throw new PrivateAccessException("getPrivateValue has failed: IllegalArgument");
-			
-		} catch (SecurityException e) {
-			throw new PrivateAccessException("getPrivateValue has failed: Security");
+		} catch (ReflectiveOperationException e) {
+			throw new PrivateAccessException("getPrivateValue has failed.", e);
 		}
 	}
 	
-	public void setPrivateValue(Class classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException {
+	public void setPrivateValue(Class<?> classToPerformOn, Object instanceToPerformOn, int zeroOffsets, Object newValue) throws PrivateAccessException {
 		try {
 			Field field = classToPerformOn.getDeclaredFields()[zeroOffsets];
-			field.setAccessible(true);
-			int j = fieldMod.getInt(field);
-			
-			if ((j & 0x10) != 0) {
-				fieldMod.setInt(field, j & 0xffffffef);
-			}
+			giveMeAccess(field);
 			field.set(instanceToPerformOn, newValue);
 			
-		} catch (IllegalAccessException illegalaccessexception) {
-			throw new PrivateAccessException("setPrivateValue has failed: IllegalAccess");
-			
-		} catch (IllegalArgumentException e) {
-			throw new PrivateAccessException("setPrivateValue has failed: IllegalArgument");
-			
-		} catch (SecurityException e) {
-			throw new PrivateAccessException("setPrivateValue has failed: Security");
+		} catch (ReflectiveOperationException e) {
+			throw new PrivateAccessException("setPrivateValue has failed.", e);
 		}
 	}
 	
-	public Object getPrivateValueViaName(Class classToPerformOn, Object instanceToPerformOn, String obf) throws PrivateAccessException {
+	public Object getPrivateValueViaName(Class<?> classToPerformOn, Object instanceToPerformOn, String obf) throws PrivateAccessException {
 		try {
 			Field field = classToPerformOn.getDeclaredField(obf);
 			field.setAccessible(true);
 			return field.get(instanceToPerformOn);
 			
-		} catch (IllegalAccessException illegalaccessexception) {
-			throw new PrivateAccessException("getPrivateValue has failed: IllegalAccess");
-		} catch (IllegalArgumentException e) {
-			throw new PrivateAccessException("getPrivateValue has failed: IllegalArgument");
-		} catch (SecurityException e) {
-			throw new PrivateAccessException("getPrivateValue has failed: Security");
-		} catch (NoSuchFieldException e) {
-			throw new PrivateAccessException("getPrivateValue has failed: NoSuchField");
+		} catch (ReflectiveOperationException e) {
+			throw new PrivateAccessException("getPrivateValue has failed.", e);
 		}
 		
 	}
 	
-	public void setPrivateValueViaName(Class classToPerformOn, Object instanceToPerformOn, String obf, Object newValue) throws PrivateAccessException {
+	public void setPrivateValueViaName(Class<?> classToPerformOn, Object instanceToPerformOn, String obf, Object newValue) throws PrivateAccessException {
 		try {
 			Field field = classToPerformOn.getDeclaredField(obf);
-			field.setAccessible(true);
-			int j = fieldMod.getInt(field);
-			
-			if ((j & 0x10) != 0) {
-				fieldMod.setInt(field, j & 0xffffffef);
-			}
+			giveMeAccess(field);
 			field.set(instanceToPerformOn, newValue);
-		} catch (IllegalAccessException illegalaccessexception) {
-			throw new PrivateAccessException("setPrivateValue has failed: IllegalAccess");
-		} catch (IllegalArgumentException e) {
-			throw new PrivateAccessException("setPrivateValue has failed: IllegalArgument");
-		} catch (SecurityException e) {
-			throw new PrivateAccessException("setPrivateValue has failed: Security");
-		} catch (NoSuchFieldException e) {
-			throw new PrivateAccessException("setPrivateValue has failed: NoSuchField");
+		} catch (ReflectiveOperationException e) {
+			throw new PrivateAccessException("setPrivateValue has failed.", e);
+		}
+	}
+	
+	private void giveMeAccess(Field field) throws ReflectiveOperationException {
+		field.setAccessible(true);
+		int j = fieldMod.getInt(field);
+		
+		if ((j & 0x10) != 0) {
+			fieldMod.setInt(field, j & 0xffffffef);
 		}
 	}
 }

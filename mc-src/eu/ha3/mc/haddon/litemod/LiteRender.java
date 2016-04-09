@@ -10,6 +10,10 @@ import eu.ha3.mc.haddon.Haddon;
 import eu.ha3.mc.haddon.OperatorRenderer;
 import eu.ha3.mc.haddon.supporting.SupportsRenderEvents;
 
+/**
+ * Boilerplate to distance Ha3 code from the LiteLoader codebase.
+ *
+ */
 public class LiteRender extends LiteBase implements OperatorRenderer, RenderListener {
 	public LiteRender(Haddon haddon) {
 		super(haddon);
@@ -30,6 +34,7 @@ public class LiteRender extends LiteBase implements OperatorRenderer, RenderList
 		((SupportsRenderEvents) haddon).onSetupCameraTransform();
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addRenderable(Class renderClass, Object renderable) {
 		ModUtilities.addRenderer(renderClass, (Render) renderable);

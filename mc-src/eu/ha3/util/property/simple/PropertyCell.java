@@ -17,7 +17,7 @@ public class PropertyCell implements PropertyHolder {
 		if (properties.containsKey(name)) {
 			return properties.get(name);
 		}
-		throw new PropertyMissingException();
+		throw new PropertyMissingException(name);
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class PropertyCell implements PropertyHolder {
 		try {
 			return Boolean.parseBoolean(getString(name));
 		} catch (NumberFormatException e) {
-			throw new PropertyTypeException();
+			throw new PropertyTypeException(e);
 		}
 	}
 	
@@ -34,7 +34,7 @@ public class PropertyCell implements PropertyHolder {
 		try {
 			return Integer.parseInt(getString(name));
 		} catch (NumberFormatException e) {
-			throw new PropertyTypeException();
+			throw new PropertyTypeException(e);
 		}
 	}
 	
@@ -43,7 +43,7 @@ public class PropertyCell implements PropertyHolder {
 		try {
 			return Float.parseFloat(getString(name));
 		} catch (NumberFormatException e) {
-			throw new PropertyTypeException();
+			throw new PropertyTypeException(e);
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class PropertyCell implements PropertyHolder {
 		try {
 			return Long.parseLong(getString(name));
 		} catch (NumberFormatException e) {
-			throw new PropertyTypeException();
+			throw new PropertyTypeException(e);
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class PropertyCell implements PropertyHolder {
 		try {
 			return Double.parseDouble(getString(name));
 		} catch (NumberFormatException e) {
-			throw new PropertyTypeException();
+			throw new PropertyTypeException(e);
 		}
 	}
 	

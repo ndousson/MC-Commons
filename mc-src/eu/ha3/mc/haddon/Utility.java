@@ -2,6 +2,8 @@ package eu.ha3.mc.haddon;
 
 import java.io.File;
 
+import eu.ha3.mc.haddon.implem.Instantiator;
+
 /**
  * Basic utility interface for communicating with the game.
  */
@@ -61,6 +63,20 @@ public interface Utility {
 	 * @throws PrivateAccessException
 	 */
 	public void setPrivate(Object instance, String name, Object value) throws PrivateAccessException;
+	
+	/**
+	 * Checks it a given class exists in the current environment.
+	 * @param className
+	 * @return
+	 */
+	public boolean isPresent(String className);
+	
+	/**
+	 * Creates a virtual constructor for the given class. Returns a dummy if the class does not exist.
+	 * @param className
+	 * @param parameters
+	 */
+	public <E> Instantiator<E> getInstantiator(String className, Class<?>... types);
 	
 	/**
 	 * Returns the world height.<br/>

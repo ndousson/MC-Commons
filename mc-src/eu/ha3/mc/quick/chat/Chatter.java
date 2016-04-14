@@ -16,17 +16,14 @@ public class Chatter {
 	}
 	
 	public void printChat(Object... args) {
-		printChat(new Object[] { EnumChatFormatting.WHITE, prefix }, args);
+		Object[] dest = new Object[args.length + 2];
+		dest[0] = EnumChatFormatting.WHITE;
+		dest[1] = prefix;
+		System.arraycopy(args, 0, dest, 2, args.length);
+		mod.getUtility().printChat(dest);
 	}
 	
 	public void printChatShort(Object... args) {
 		mod.getUtility().printChat(args);
-	}
-	
-	protected void printChat(final Object[] in, Object... args) {
-		Object[] dest = new Object[in.length + args.length];
-		System.arraycopy(in, 0, dest, 0, in.length);
-		System.arraycopy(args, 0, dest, in.length, args.length);
-		mod.getUtility().printChat(dest);
 	}
 }

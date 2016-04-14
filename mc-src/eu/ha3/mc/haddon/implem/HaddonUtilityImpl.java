@@ -11,6 +11,7 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -23,6 +24,7 @@ import eu.ha3.mc.haddon.Utility;
 
 public abstract class HaddonUtilityImpl implements Utility {
 	private static final int WORLD_HEIGHT = 256;
+	private static final NullInstantiator NULL_INSTANTIATOR = new NullInstantiator();
 	
 	private static final HaddonClientImpl client = new HaddonClientImpl();
 	
@@ -58,6 +60,16 @@ public abstract class HaddonUtilityImpl implements Utility {
 	@Override
 	public void setPrivate(Object instance, String name, Object value) throws PrivateAccessException {
 		setters.get(name).set(instance, value);
+	}
+	
+	@Override
+	public boolean isPresent(String className) {
+		return NULL_INSTANTIATOR.lookupClass(className) != null;
+	}
+	
+	@Override
+	public <E> Instantiator<E> getInstantiator(String className, Class<?>... types) {
+		return NULL_INSTANTIATOR.getOrCreate(className, types);
 	}
 	
 	@Override
@@ -174,7 +186,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 					style = ((ChatStyle)o);
 				}
 			} else {
-				ChatComponentText line = new ChatComponentText(o.toString());
+				IChatComponent line = o instanceof String ? new ChatComponentTranslation(o.toString()) : new ChatComponentText(o.toString());
 				if (style != null) {
 					line.setChatStyle(style);
 					style = null;

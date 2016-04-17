@@ -7,14 +7,13 @@ import java.util.Map;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentStyle;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 
 import org.lwjgl.input.Keyboard;
 
@@ -129,15 +128,14 @@ public abstract class HaddonUtilityImpl implements Utility {
 	public void printChat(Object... args) {
 		if (client.unsafe().thePlayer == null) return;
 		
-		ChatComponentText message = new ChatComponentText("");
-		ChatStyle style = null;
+		TextComponentString message = new TextComponentString("");
+		Style style = null;
 		for (Object o : args) {
-			if (o instanceof EnumChatFormatting) {
-				EnumChatFormatting code = (EnumChatFormatting)o;
+			if (o instanceof TextFormatting) {
+				TextFormatting code = (TextFormatting)o;
 				if (style == null) {
-					style = new ChatStyle();
+					style = new Style();
 				}
-				
 				switch (code) {
 					case OBFUSCATED:
 						style.setObfuscated(true);
@@ -161,32 +159,26 @@ public abstract class HaddonUtilityImpl implements Utility {
 						style.setColor(code);
 				}
 			} else if (o instanceof ClickEvent) {
-				if (style == null) {
-					style = new ChatStyle();
-				}
+				if (style == null) style = new Style();
 				style.setChatClickEvent((ClickEvent)o);
 			} else if (o instanceof HoverEvent) {
-				if (style == null) {
-					style = new ChatStyle();
-				}
+				if (style == null) style = new Style();
 				style.setChatHoverEvent((HoverEvent)o);
-			} else if (o instanceof IChatComponent) {
-				if (o instanceof ChatComponentStyle) {
-					if (style != null) {
-						((ChatComponentStyle)o).setChatStyle(style);
-						style = null;
-					}
+			} else if (o instanceof ITextComponent) {
+				if (style != null) {
+					((ITextComponent)o).setChatStyle(style);
+					style = null;
 				}
-				message.appendSibling((IChatComponent)o);
-			} else if (o instanceof ChatStyle) {
-				if (!((ChatStyle)o).isEmpty()) {
+				message.appendSibling((ITextComponent)o);
+			} else if (o instanceof Style) {
+				if (!((Style)o).isEmpty()) {
 					if (style != null) {
-						inheritFlat((ChatStyle)o, style);
+						inheritFlat((Style)o, style);
 					}
-					style = ((ChatStyle)o);
+					style = ((Style)o);
 				}
 			} else {
-				IChatComponent line = o instanceof String ? new ChatComponentTranslation(o.toString()) : new ChatComponentText(o.toString());
+				ITextComponent line = o instanceof String ? new TextComponentTranslation((String)o) : new TextComponentString(o.toString());
 				if (style != null) {
 					line.setChatStyle(style);
 					style = null;
@@ -204,7 +196,7 @@ public abstract class HaddonUtilityImpl implements Utility {
      * @param parent	The parent to inherit style information
      * @param child		The child style who's properties will override those in the parent
      */
-    private void inheritFlat(ChatStyle parent, ChatStyle child) {
+    private void inheritFlat(Style parent, Style child) {
 		if ((parent.getBold() != child.getBold()) && child.getBold()) {
 			parent.setBold(true);
 		}
@@ -223,7 +215,7 @@ public abstract class HaddonUtilityImpl implements Utility {
         
         Object temp;
         if ((temp = child.getColor()) != null) {
-        	parent.setColor((EnumChatFormatting)temp);
+        	parent.setColor((TextFormatting)temp);
         }
         if ((temp = child.getChatClickEvent()) != null) {
         	parent.setChatClickEvent((ClickEvent)temp);

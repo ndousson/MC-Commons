@@ -3,8 +3,8 @@ package eu.ha3.mc.quick.update;
 import java.io.InputStream;
 import java.net.URL;
 
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
 
 import org.apache.commons.io.IOUtils;
 
@@ -119,26 +119,25 @@ public class UpdateNotifier extends Thread implements Updater {
 	private void reportUpdate(String solvedMC, String solvedType, int solved, int count) {
 		Chatter chatter = haddon.getChatter();
 		if (solvedMC.equals("")) {
-			chatter.printChat(EnumChatFormatting.GOLD, "An update is available: ", solvedType + solved);
+			chatter.printChat(TextFormatting.GOLD, "An update is available: ", solvedType + solved);
 		} else if (solvedMC.equals(haddon.getIdentity().getHaddonMinecraftVersion())) {
-			chatter.printChat(EnumChatFormatting.GOLD, "An update is available for your version of Minecraft: ", solvedType + solved);
+			chatter.printChat(TextFormatting.GOLD, "An update is available for your version of Minecraft: ", solvedType + solved);
 		} else {
 			chatter.printChat(
-					EnumChatFormatting.GOLD, "An update is available for ",
-					EnumChatFormatting.GOLD, EnumChatFormatting.ITALIC, "another",
-					EnumChatFormatting.GOLD, " version of Minecraft: ", solvedType + solved + " for " + solvedMC);
+					TextFormatting.GOLD, "An update is available for ",
+					TextFormatting.GOLD, TextFormatting.ITALIC, "another",
+					TextFormatting.GOLD, " version of Minecraft: ", solvedType + solved + " for " + solvedMC);
 		}
-		chatter.printChatShort(
-				EnumChatFormatting.GOLD, "You're ", EnumChatFormatting.WHITE, count, EnumChatFormatting.GOLD, " version" + (count > 1 ? "s" : "") + " late.");
-		chatter.printChatShort(EnumChatFormatting.UNDERLINE, new ClickEvent(ClickEvent.Action.OPEN_URL, haddon.getIdentity().getHaddonAddress()), haddon.getIdentity().getHaddonAddress());
+		chatter.printChatShort(TextFormatting.GOLD, "You're ", TextFormatting.WHITE, count, TextFormatting.GOLD, " version" + (count > 1 ? "s" : "") + " late.");
+		chatter.printChatShort(TextFormatting.UNDERLINE, new ClickEvent(ClickEvent.Action.OPEN_URL, haddon.getIdentity().getHaddonAddress()), haddon.getIdentity().getHaddonAddress());
 		
 		if (displayRemaining > 0) {
 			chatter.printChatShort(
-					EnumChatFormatting.GRAY, "This message will display ",
-					EnumChatFormatting.WHITE, displayRemaining,
-					EnumChatFormatting.GRAY, " more time" + (displayRemaining > 1 ? "s" : "") + ".");
+					TextFormatting.GRAY, "This message will display ",
+					TextFormatting.WHITE, displayRemaining,
+					TextFormatting.GRAY, " more time" + (displayRemaining > 1 ? "s" : "") + ".");
 		} else {
-			chatter.printChatShort(EnumChatFormatting.GRAY, "You won't be notified anymore unless a newer version comes out.");
+			chatter.printChatShort(TextFormatting.GRAY, "You won't be notified anymore unless a newer version comes out.");
 		}
 	}
 	

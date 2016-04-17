@@ -1,12 +1,11 @@
 package eu.ha3.mc.haddon.litemod;
 
-import net.minecraft.util.IChatComponent;
-
 import com.mumfrey.liteloader.ChatListener;
 
 import eu.ha3.mc.haddon.Haddon;
 import eu.ha3.mc.haddon.OperatorChatWatcher;
 import eu.ha3.mc.haddon.supporting.SupportsChatEvents;
+import net.minecraft.util.text.ITextComponent;
 
 public class LiteChat extends LiteBase implements OperatorChatWatcher, ChatListener {
 	protected final boolean suChat;
@@ -24,7 +23,7 @@ public class LiteChat extends LiteBase implements OperatorChatWatcher, ChatListe
 	}
 	
 	@Override
-	public void onChat(IChatComponent chat, String message) {
+	public void onChat(ITextComponent chat, String message) {
 		if (suChat && enableChat) {
 			((SupportsChatEvents) haddon).onChat(chat, message);
 		}

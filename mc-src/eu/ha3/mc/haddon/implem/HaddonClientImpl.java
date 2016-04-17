@@ -29,7 +29,7 @@ public class HaddonClientImpl implements Client {
 	
 	@Override
 	public List<EntityPlayer> getAllPlayers() {
-		MinecraftServer server = MinecraftServer.getServer();
+		MinecraftServer server = Minecraft.getMinecraft().getIntegratedServer();
 		if (server != null) {
 			EntityPlayer player = getPlayer();
 			if (player != null) {

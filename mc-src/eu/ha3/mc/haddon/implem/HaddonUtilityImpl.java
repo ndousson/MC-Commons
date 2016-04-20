@@ -178,7 +178,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 					style = ((Style)o);
 				}
 			} else {
-				ITextComponent line = o instanceof String ? new TextComponentTranslation((String)o) : new TextComponentString(o.toString());
+				ITextComponent line = o instanceof String ? new TextComponentTranslation((String)o) : new TextComponentString(String.valueOf(o));
 				if (style != null) {
 					line.setChatStyle(style);
 					style = null;

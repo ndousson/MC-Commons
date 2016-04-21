@@ -27,14 +27,21 @@ public class HaddonClientImpl implements Client {
 		return unsafe().thePlayer;
 	}
 	
+	private int getDimensionIndex(int dimensionLevel) {
+        if (dimensionLevel == -1) return 1;
+        if (dimensionLevel == 1) return 2;
+        return dimensionLevel;
+    }
+	
 	@Override
 	public List<EntityPlayer> getAllPlayers() {
 		MinecraftServer server = Minecraft.getMinecraft().getIntegratedServer();
 		if (server != null) {
 			EntityPlayer player = getPlayer();
 			if (player != null) {
-				if (server.worldServers != null) {
-					WorldServer world = server.worldServers[player.dimension];
+				int dimension = getDimensionIndex(player.dimension);
+				if (server.worldServers != null && dimension >= 0 && dimension < server.worldServers.length) {
+					WorldServer world = server.worldServers[dimension];
 					if (world != null) {
 						return world.playerEntities; //Hosting/Singleplayer
 					}

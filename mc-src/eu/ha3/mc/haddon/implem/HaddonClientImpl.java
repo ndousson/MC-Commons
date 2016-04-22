@@ -14,6 +14,7 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class HaddonClientImpl implements Client {
@@ -33,6 +34,8 @@ public class HaddonClientImpl implements Client {
         return dimensionLevel;
     }
 	
+	private static final ArrayList<EntityPlayer> empty = new ArrayList<EntityPlayer>();
+	
 	@Override
 	public List<EntityPlayer> getAllPlayers() {
 		MinecraftServer server = Minecraft.getMinecraft().getIntegratedServer();
@@ -46,10 +49,13 @@ public class HaddonClientImpl implements Client {
 						return world.playerEntities; //Hosting/Singleplayer
 					}
 				}
-				return unsafe().theWorld.playerEntities; //Remote
 			}
 		}
-		return new ArrayList<EntityPlayer>();
+		World theWorld = unsafe().theWorld;
+		if (theWorld != null) {
+			return theWorld.playerEntities; //Remote
+		}
+		return empty;
 		
 	}
 

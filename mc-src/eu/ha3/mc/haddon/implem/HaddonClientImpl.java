@@ -41,7 +41,7 @@ public class HaddonClientImpl implements Client {
 			if (player != null) {
 				int dimension = getDimensionIndex(player.dimension);
 				if (server.worldServers != null && dimension >= 0 && dimension < server.worldServers.length) {
-					WorldServer world = server.worldServers[player.dimension];
+					WorldServer world = server.worldServers[dimension];
 					if (world != null) {
 						return world.playerEntities; //Hosting/Singleplayer
 					}

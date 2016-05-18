@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import com.mumfrey.liteloader.InitCompleteListener;
 import com.mumfrey.liteloader.LiteMod;
+import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
 
 import eu.ha3.mc.haddon.Haddon;
@@ -16,7 +17,7 @@ import eu.ha3.mc.haddon.supporting.SupportsFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsPlayerFrameEvents;
 import eu.ha3.mc.haddon.supporting.SupportsTickEvents;
 
-public class LiteBase implements LiteMod, InitCompleteListener, OperatorCaster {
+public class LiteBase implements LiteMod, Tickable, InitCompleteListener, OperatorCaster {
 	protected final Haddon haddon;
 	protected final boolean shouldTick;
 	protected final boolean suTick;

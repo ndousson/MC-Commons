@@ -160,13 +160,13 @@ public abstract class HaddonUtilityImpl implements Utility {
 				}
 			} else if (o instanceof ClickEvent) {
 				if (style == null) style = new Style();
-				style.setChatClickEvent((ClickEvent)o);
+				style.setClickEvent((ClickEvent)o);
 			} else if (o instanceof HoverEvent) {
 				if (style == null) style = new Style();
-				style.setChatHoverEvent((HoverEvent)o);
+				style.setHoverEvent((HoverEvent)o);
 			} else if (o instanceof ITextComponent) {
 				if (style != null) {
-					((ITextComponent)o).setChatStyle(style);
+					((ITextComponent)o).setStyle(style);
 					style = null;
 				}
 				message.appendSibling((ITextComponent)o);
@@ -180,7 +180,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 			} else {
 				ITextComponent line = o instanceof String ? new TextComponentTranslation((String)o) : new TextComponentString(String.valueOf(o));
 				if (style != null) {
-					line.setChatStyle(style);
+					line.setStyle(style);
 					style = null;
 				}
 				message.appendSibling(line);
@@ -217,11 +217,11 @@ public abstract class HaddonUtilityImpl implements Utility {
         if ((temp = child.getColor()) != null) {
         	parent.setColor((TextFormatting)temp);
         }
-        if ((temp = child.getChatClickEvent()) != null) {
-        	parent.setChatClickEvent((ClickEvent)temp);
+        if ((temp = child.getClickEvent()) != null) {
+        	parent.setClickEvent((ClickEvent)temp);
         }
-        if ((temp = child.getChatHoverEvent()) != null) {
-        	parent.setChatHoverEvent((HoverEvent)temp);
+        if ((temp = child.getHoverEvent()) != null) {
+        	parent.setHoverEvent((HoverEvent)temp);
         }
         if ((temp = child.getInsertion()) != null) {
         	parent.setInsertion((String)temp);

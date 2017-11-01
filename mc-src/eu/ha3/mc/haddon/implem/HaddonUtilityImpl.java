@@ -126,7 +126,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 	
 	@Override
 	public void printChat(Object... args) {
-		if (client.unsafe().thePlayer == null) return;
+		if (client.unsafe().player == null) return;
 		
 		TextComponentString message = new TextComponentString("");
 		Style style = null;
@@ -186,8 +186,9 @@ public abstract class HaddonUtilityImpl implements Utility {
 				message.appendSibling(line);
 			}
 		}
-		
-		client.unsafe().thePlayer.addChatComponentMessage(message);
+
+		// @TODO : is this true ? (check old version of this line)
+		client.unsafe().player.sendChatMessage(message.getText());
 	}
 	
     /**
@@ -246,14 +247,14 @@ public abstract class HaddonUtilityImpl implements Utility {
 		drawString_scaledRes = new ScaledResolution(client.unsafe());
 		drawString_screenWidth = drawString_scaledRes.getScaledWidth();
 		drawString_screenHeight = drawString_scaledRes.getScaledHeight();
-		drawString_textHeight = client.unsafe().fontRendererObj.FONT_HEIGHT;
+		drawString_textHeight = client.unsafe().fontRenderer.FONT_HEIGHT;
 	}
 	
 	@Override
 	public void drawString(String text, float px, float py, int offx, int offy, char alignment, int cr, int cg, int cb, int ca, boolean hasShadow) {
 		if (drawString_scaledRes == null) prepareDrawString();
 		
-		FontRenderer font = client.unsafe().fontRendererObj;
+		FontRenderer font = client.unsafe().fontRenderer;
 		
 		int xPos = (int) Math.floor(px * drawString_screenWidth) + offx;
 		int yPos = (int) Math.floor(py * drawString_screenHeight) + offy;

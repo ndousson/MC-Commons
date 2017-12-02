@@ -188,7 +188,7 @@ public abstract class HaddonUtilityImpl implements Utility {
 		}
 
 		// @TODO : is this true ? (check old version of this line)
-		client.unsafe().player.sendChatMessage(message.getText());
+		client.unsafe().player.sendMessage(message);
 	}
 	
     /**

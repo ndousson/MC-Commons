@@ -25,7 +25,7 @@ public interface Utility {
 	 * @param lessToMoreImportantFieldName
 	 */
 	public void registerPrivateGetter(String name, Class<?> classToPerformOn, int zeroOffsets, String... lessToMoreImportantFieldName);
-	
+
 	/**
 	 * Register a Private Access setter on a certain name, that operates on a
 	 * certain Class in a certain Object instance. The last two arguments are
